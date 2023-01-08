@@ -1,11 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
+import { useUserAuth } from '../auth/useAuth';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Layout({ main }) {
-    const authenticated = false;
+    const {data: session} = useSession()
 
-    const logout = () => null;
+    // const authenticated = false;
+    const authenticated = !! session
 
+    // const logout = () => null;
+
+
+    // const { logout, user } = useUserAuth();
+    // const authenticated = !! user;
 
     return (
         <div className="bg-gray-800 max-w-screen-2xl mx-auto h-screen w-screen text-white">
@@ -19,12 +27,12 @@ export default function Layout({ main }) {
                         <Link href="/crosswalks/add">
                         add crosswalk
                     </Link>
-                    <button onClick={logout}>
+                    <button onClick={() => signOut()}>
                         logout
                     </button>
                     </>
                     :
-                    <Link href="/auth">
+                    <Link href="/login">
                         login/signup
                     </Link>}
                     

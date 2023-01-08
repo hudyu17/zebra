@@ -1,7 +1,8 @@
-import React from 'react'
+import Layout from '../src/components/layout'
+import FirebaseAuth from '../src/components/firebaseAuth'
 
 export default function Auth() {
   return (
-    <div>auth</div>
+    <Layout main={<div>lmao</div>}/>
   )
 }
