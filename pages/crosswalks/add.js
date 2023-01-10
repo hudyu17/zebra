@@ -5,10 +5,13 @@ import CrosswalkForm from "../../src/components/crosswalkForm"
 import Places from "../../src/components/crosswalkForm"
 
 export default function Add() {
+    const { data: session, status } = useSession()
+
   return (
     <div>
         {/* <CrosswalkForm/> */}
         <Places/>
+        <div>{session.user.email}</div>
     </div>
   )
 }

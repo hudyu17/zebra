@@ -15,13 +15,7 @@ import "@reach/combobox/styles.css";
 import SearchBox from "./searchBox";
 
 export default function Places() {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-  });
-
   
-  if (!isLoaded) return <div>Loading... HUGE MESSAGE HERE</div>;
   return <SearchBox />;
 
 }
