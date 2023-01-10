@@ -1,79 +1,80 @@
-import React, {useState} from 'react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Combobox } from '@headlessui/react'
+import { useState, useEffect } from "react";
+import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
-    getGeocode,
-    getLatLng,
-  } from "use-places-autocomplete";
-
-
-export function SearchBox({ onSelectAddress, defaultValue }) {
-
-    return (
-        <div>searchBox</div>
-    )
-}
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+  } from "@reach/combobox";
+  import "@reach/combobox/styles.css";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
-  }  
+  }
 
-function ReadySearchBox({ onSelectAddress, defaultValue }) {
+export default function SearchBox() {
+    
+    const [selected, setSelected] = useState(null);
+    
+    // for checking purposes
+    useEffect(() => {
+        console.log(selected)
+    }, [selected])
+
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+        libraries: ["places"],
+    });
+
+  
+    if (!isLoaded) return (
+        <div className="flex items-center justify-center h-screen">Loading... </div>
+    );
+    return <PlacesAutocomplete setSelected={setSelected} />;
+}
+
+
+export const PlacesAutocomplete = ({ setSelected }) => {
     const {
         ready,
         value,
         setValue,
         suggestions: { status, data },
         clearSuggestions,
-      } = usePlacesAutocomplete({ debounce: 300, defaultValue });
+    } = usePlacesAutocomplete();
 
-    return (
-        <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson}>
-      <Combobox.Label className="block text-sm font-medium text-gray-700">Assigned to</Combobox.Label>
-      <div className="relative mt-1">
-        <Combobox.Input
-          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-          onChange={(event) => setQuery(event.target.value)}
-          displayValue={(person) => person?.name}
-        />
-        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-          <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-        </Combobox.Button>
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
 
-        {filteredPeople.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredPeople.map((person) => (
-              <Combobox.Option
-                key={person.id}
-                value={person}
-                className={({ active }) =>
-                  classNames(
-                    'relative cursor-default select-none py-2 pl-3 pr-9',
-                    active ? 'bg-indigo-600 text-white' : 'text-gray-900'
-                  )
-                }
-              >
-                {({ active, selected }) => (
-                  <>
-                    <span className={classNames('block truncate', selected && 'font-semibold')}>{person.name}</span>
+    const results = await getGeocode({ address });
+    const { lat, lng } = await getLatLng(results[0]);
+    setSelected({ lat, lng });
+  };
 
-                    {selected && (
-                      <span
-                        className={classNames(
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-indigo-600'
-                        )}
-                      >
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    )}
-                  </>
-                )}
-              </Combobox.Option>
-            ))}
-          </Combobox.Options>
-        )}
-      </div>
-    </Combobox>
-    )
-}
+  return (
+    <Combobox onSelect={handleSelect}>
+           <ComboboxInput
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            disabled={!ready}
+            className="w-1/2 border-2 border-gray-800 p-4 rounded-md"
+            placeholder="Search an address"
+          />
+          <ComboboxPopover>
+            <ComboboxList>
+              {status === "OK" &&
+                data.map(({ place_id, description }) => (
+                  <ComboboxOption key={place_id} value={description} />
+                ))}
+            </ComboboxList>
+          </ComboboxPopover>
+        </Combobox>
+  );
+};
