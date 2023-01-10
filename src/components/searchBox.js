@@ -18,18 +18,12 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
 
-export default function SearchBox() {
+const libraries = ['places']
+export default function SearchBox({ setSelected }) {
     
-    const [selected, setSelected] = useState(null);
-    
-    // for checking purposes
-    useEffect(() => {
-        console.log(selected)
-    }, [selected])
-
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-        libraries: ["places"],
+        libraries,
     });
 
   
@@ -47,7 +41,12 @@ export const PlacesAutocomplete = ({ setSelected }) => {
         setValue,
         suggestions: { status, data },
         clearSuggestions,
-    } = usePlacesAutocomplete();
+    } = usePlacesAutocomplete({
+        requestOptions: {
+            componentRestrictions: { country: ["US", "CA"], },
+          },
+          debounce: 300,
+    });
 
   const handleSelect = async (address) => {
     setValue(address, false);
@@ -64,7 +63,7 @@ export const PlacesAutocomplete = ({ setSelected }) => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             disabled={!ready}
-            className="w-1/2 border-2 border-gray-800 p-4 rounded-md"
+            className="w-1/2 border-2 border-gray-800 p-4 rounded-md text-gray-900"
             placeholder="Search an address"
           />
           <ComboboxPopover>

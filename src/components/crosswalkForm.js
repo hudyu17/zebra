@@ -13,11 +13,41 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import SearchBox from "./searchBox";
+import MapComponent from "./map";
+import Layout from "./layout";
 
 export default function Places() {
-  
-  return <SearchBox />;
-
+    const [selected, setSelected] = useState(null);
+    const [viewState, setViewState] = useState({
+        longitude: -79.4005188,
+        latitude: 43.6622882,
+        zoom: 10
+      });
+    
+    
+    useEffect(() => {
+        // for checking purposes
+        console.log(selected)
+        if (selected !== null) {
+            setViewState({longitude: selected.lng, latitude: selected.lat, zoom: 18})
+            console.log(selected)
+        }
+    }, [selected])
+    
+    return (
+        <Layout main={<div>
+            <SearchBox setSelected={setSelected}/>
+            {selected && 
+                <div>
+                    <p>your selected latitude: {selected.lat}</p>
+                    <p>your selected longitude: {selected.lng}</p>
+                </div>
+            }
+            <MapComponent viewState={viewState} setViewState={setViewState} mapStyle="mapbox://styles/mapbox/streets-v9"/>; 
+            {/* can switch "streets" to "satellite" */}
+        </div>}/>
+        
+    );
 }
 
 // function Map() {
