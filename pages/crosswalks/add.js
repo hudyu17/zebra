@@ -2,11 +2,13 @@ import { unstable_getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { useSession } from "next-auth/react"
 import CrosswalkForm from "../../src/components/crosswalkForm"
+import Places from "../../src/components/crosswalkForm"
 
 export default function Add() {
   return (
     <div>
-        <CrosswalkForm/>
+        {/* <CrosswalkForm/> */}
+        <Places/>
     </div>
   )
 }
