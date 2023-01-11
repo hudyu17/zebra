@@ -16,7 +16,7 @@ import SearchBox from "./searchBox";
 import MapComponent from "./map";
 import Layout from "./layout";
 
-export default function Places({ markers }) {
+export default function Places({ markers, session }) {
     const [selected, setSelected] = useState(null);
     const [viewState, setViewState] = useState({
         longitude: -79.4005188,
@@ -35,9 +35,6 @@ export default function Places({ markers }) {
     
     
     return (
-        <Layout main={<div className="grid gap-4">
-            <MapComponent markers={markers}/>; 
-        </div>}/>
-        
+        <MapComponent markers={markers} session={session}/>        
     );
 }

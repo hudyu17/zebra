@@ -31,7 +31,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.41.5",
     "react-map-gl": "^7.0.21",
-    "use-places-autocomplete": "^4.0.0"
+    "use-places-autocomplete": "^4.0.0",
+    "v8": "^0.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

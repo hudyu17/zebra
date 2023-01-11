@@ -9,8 +9,7 @@ export default function Add({ markers }) {
 
     return (
         <div>
-            {/* <CrosswalkForm/> */}
-            <Places markers={markers}/>
+            <Places markers={markers} session={session}/>
             <div>{session.user.email}</div>
         </div>
     )

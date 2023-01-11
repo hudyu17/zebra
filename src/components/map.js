@@ -3,8 +3,10 @@ import React, { useRef, useState, useEffect } from "react"
 import Map, { Marker, Popup, ViewState } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
+import AuthModal from "./authModal";
 
-export default function MapComponent({ markers }) {
+export default function MapComponent({ markers, session }) {
+  const [modalOpen, setModalOpen] = useState(false)
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [cursorType, setCursorType] = useState('pointer')
@@ -28,6 +30,11 @@ export default function MapComponent({ markers }) {
   }
 
   const handleAddClick = () => {
+    if (!session) {
+      console.log('need auth')
+      setModalOpen(true)
+      return
+    }
     setAddActive(true)
     setCursorType('crosshair')
   }
@@ -48,7 +55,8 @@ export default function MapComponent({ markers }) {
   }, [selected])
 
   return (
-    <div className="text-black relative" >
+    <div className="text-black">
+      <div className="absolute z-10 flex">
       <SearchBox setSelected={setSelected}/>
         {!addActive && 
           <button
@@ -68,12 +76,12 @@ export default function MapComponent({ markers }) {
             <p>confirm selection</p>
           </button>
         }      
-            
-      <div ref={mapContainer}>
+      </div>
+      <div ref={mapContainer} className=''>
         <Map
           {...viewState}
           onMove={evt => setViewState(evt.viewState)}
-          style={{width: '100vw', height: '100vh'}}
+          style={{width: '100%', height: '100vh'}}
           mapStyle="mapbox://styles/mapbox/streets-v9"
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN}
           onClick={(evt) => handleClick(evt)}
@@ -89,6 +97,8 @@ export default function MapComponent({ markers }) {
           
         </Map>
       </div>
+
+      <AuthModal open={modalOpen} setOpen={setModalOpen}/>
     </div>
   )
 }

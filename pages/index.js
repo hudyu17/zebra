@@ -1,13 +1,19 @@
+import { unstable_getServerSession } from "next-auth/next"
+import { useSession } from "next-auth/react"
+
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import Layout from '../src/components/layout'
-import MapComponent from '../src/components/map'
+import Places from "../src/components/crosswalkForm"
+import { authOptions } from "./api/auth/[...nextauth]"
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home({ markers }) {
+  const { data: session, status } = useSession()
+
   return (
     <>
       <Head>
@@ -17,9 +23,23 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout 
-      main={<div>
-        <MapComponent/>
-      </div>}/>
+      main={        
+        <div>
+          <Places markers={markers} session={session}/>
+        </div>
+      }/>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+  const markers = []
+  return {
+    props: {
+      session,
+      markers
+    },
+  }
 }

@@ -16,21 +16,20 @@ export default function Layout({ main }) {
     // const authenticated = !! user;
 
     return (
-        <div className="bg-gray-800 max-w-screen-2xl mx-auto h-screen w-screen text-white">
+        <div className="bg-gray-800 max-w-screen-2xl mx-auto h-screen w-screen text-white grid grid-cols-5">
+            <main className='col-span-4'>
+                {main}
+            </main>
             <nav className="bg-gray-900">
-               <div className="px-6 flex items-center justify-between h-16">
+               <div className="flex flex-col">
                     <Link href="/">
                         home
                     </Link>
                     
-                    {authenticated ? <>
-                        <Link href="/crosswalks/add">
-                        add crosswalk
-                    </Link>
-                    <button onClick={() => signOut()}>
-                        logout
-                    </button>
-                    </>
+                    {authenticated ?
+                        <button onClick={() => signOut()}>
+                            logout
+                        </button>
                     :
                     <Link href="/login">
                         login/signup
@@ -38,9 +37,7 @@ export default function Layout({ main }) {
                     
                </div>
             </nav>
-            <main>
-                {main}
-            </main>
+
         
         </div>
     )
