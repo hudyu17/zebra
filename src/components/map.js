@@ -4,6 +4,8 @@ import Map, { Marker, Popup, ViewState } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
+import { createCrosswalk } from "../utils/db/crosswalk";
+import axios from "axios";
 
 export default function MapComponent({ markers, session }) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -39,10 +41,17 @@ export default function MapComponent({ markers, session }) {
     setCursorType('crosshair')
   }
 
-  const handleSelection = () => {
+  const handleSelection = async () => {
     setAddActive(false)
-
+    
     // add to db
+    const userId = session.user.email;
+    const lat = marker.lat;
+    const lng = marker.lng;
+
+    await axios.post("/api/db/createCrosswalk", {
+      userId, lat, lng
+    });
   }
 
   useEffect(() => {
@@ -56,26 +65,35 @@ export default function MapComponent({ markers, session }) {
 
   return (
     <div className="text-black">
-      <div className="absolute z-10 flex">
+      <div className="absolute z-10 flex gap-6 p-6">
       <SearchBox setSelected={setSelected}/>
-        {!addActive && 
+      {!addActive && 
+        <button
+          type="button"
+          className="inline-flex w-40 items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleAddClick}
+        >
+          <p>add a crosswalk</p>
+        </button>
+      }    
+      {addActive && cursorType==="crosshair" &&
+        <button
+          type="button"
+          className="cursor-not-allowed inline-flex w-40 items-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          disabled
+        >
+          <p>select a location on the map</p>
+        </button>
+      } 
+      {addActive && cursorType==="pointer" &&
           <button
-            type="button"
-            className="inline-flex w-40 items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            onClick={handleAddClick}
-          >
-            <p>add a crosswalk</p>
-          </button>
-        }     
-        {addActive &&
-            <button
-            type="button"
-            className="inline-flex w-40 items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            onClick={handleSelection}
-          >
-            <p>confirm selection</p>
-          </button>
-        }      
+          type="button"
+          className="inline-flex w-40 items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleSelection}
+        >
+          <p>confirm selection</p>
+        </button>
+      }      
       </div>
       <div ref={mapContainer} className=''>
         <Map

@@ -1,5 +1,6 @@
 import { unstable_getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
+import { prisma } from "../src/prisma"
 
 import Head from 'next/head'
 import Image from 'next/image'
@@ -35,6 +36,8 @@ export default function Home({ markers }) {
 export async function getServerSideProps(context) {
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
+  const allCrosswalks = await prisma.crosswalk.findMany();
+  console.log(allCrosswalks)
   const markers = []
   return {
     props: {

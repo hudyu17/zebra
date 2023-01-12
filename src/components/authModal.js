@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { signIn } from 'next-auth/react'
 
 export default function AuthModal({ open, setOpen }) {
@@ -34,16 +34,16 @@ export default function AuthModal({ open, setOpen }) {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <div>
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                    <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                    <UserCircleIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                      Payment successful
+                      You must be logged in!
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur amet labore.
+                        Join zebra and suggest your own crosswalk.
                       </p>
                     </div>
                   </div>
@@ -55,7 +55,7 @@ export default function AuthModal({ open, setOpen }) {
                     // onClick={() => setOpen(false)}
                     onClick={() => signIn(undefined, {callbackUrl: '/'})}
                   >
-                    Login or Signup
+                    Login / Signup
                   </button>
                 </div>
               </Dialog.Panel>

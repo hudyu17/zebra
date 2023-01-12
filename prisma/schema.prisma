@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Crosswalk {
-  id        String   @default(cuid()) @id
+  id        Int      @id @default(autoincrement())
   userId    String   // email from next auth
   latitude  Float
   longitude Float

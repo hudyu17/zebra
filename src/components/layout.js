@@ -21,15 +21,15 @@ export default function Layout({ main }) {
                 {main}
             </main>
             <nav className="bg-gray-900">
-               <div className="flex flex-col">
-                    <Link href="/">
+               <div className="flex flex-col gap-10 p-6">
+                    {/* <Link href="/">
                         home
-                    </Link>
+                    </Link> */}
                     
                     {authenticated ?
-                        <button onClick={() => signOut()}>
+                        <div className="cursor-pointer" onClick={() => signOut()}>
                             logout
-                        </button>
+                        </div>
                     :
                     <Link href="/login">
                         login/signup
