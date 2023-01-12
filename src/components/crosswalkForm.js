@@ -16,13 +16,8 @@ import SearchBox from "./searchBox";
 import MapComponent from "./map";
 import Layout from "./layout";
 
-export default function Places({ markers, session }) {
+export default function Places({ markers, session, locArray, zoom }) {
     const [selected, setSelected] = useState(null);
-    const [viewState, setViewState] = useState({
-        longitude: -79.4005188,
-        latitude: 43.6622882,
-        zoom: 10
-      });
     
     useEffect(() => {
         // for checking purposes
@@ -35,6 +30,6 @@ export default function Places({ markers, session }) {
     
     
     return (
-        <MapComponent markers={markers} session={session}/>        
+        <MapComponent markers={markers} session={session} locArray={locArray}/>        
     );
 }

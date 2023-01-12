@@ -7,15 +7,17 @@ import AuthModal from "./authModal";
 import { createCrosswalk } from "../utils/db/crosswalk";
 import axios from "axios";
 
-export default function MapComponent({ markers, session }) {
+export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [cursorType, setCursorType] = useState('pointer')
   const [viewState, setViewState] = useState({
-    longitude: -79.4005188,
-    latitude: 43.6622882,
-    zoom: 10
+    // longitude: -79.4005188,
+    // latitude: 43.6622882,
+    longitude: locArray[0],
+    latitude: locArray[1],
+    zoom: locArray[2]
   });
   const [marker, setMarker] = useState(null) // could memo later if necessary
 
@@ -130,7 +132,7 @@ export default function MapComponent({ markers, session }) {
         </Map>
       </div>
 
-      <AuthModal open={modalOpen} setOpen={setModalOpen}/>
+      <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
   )
 }
