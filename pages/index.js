@@ -36,13 +36,12 @@ export default function Home({ markers }) {
 export async function getServerSideProps(context) {
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-  const allCrosswalks = await prisma.crosswalk.findMany();
-  console.log(allCrosswalks)
-  const markers = []
+  const markers = await prisma.crosswalk.findMany();
+  
   return {
     props: {
       session,
-      markers
+      markers: JSON.parse(JSON.stringify(markers))
     },
   }
 }

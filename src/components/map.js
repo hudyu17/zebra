@@ -1,5 +1,5 @@
 import Link from "next/link"
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect, useMemo } from "react"
 import Map, { Marker, Popup, ViewState } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
@@ -63,6 +63,19 @@ export default function MapComponent({ markers, session }) {
     }
   }, [selected])
 
+  const existingMarkers = useMemo(
+    () =>
+      markers.map((marker) => (
+        <Marker
+          key={`marker-${marker.id}`}
+          longitude={marker.longitude}
+          latitude={marker.latitude}
+          anchor="center"
+        />
+      )),
+    []
+  );
+
   return (
     <div className="text-black">
       <div className="absolute z-10 flex gap-6 p-6">
@@ -112,7 +125,8 @@ export default function MapComponent({ markers, session }) {
               anchor="center"
             />
           }
-          
+
+          {existingMarkers}
         </Map>
       </div>
 
