@@ -1,20 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
-import "@reach/combobox/styles.css";
-import SearchBox from "./searchBox";
+import { useState, useEffect } from "react";
 import MapComponent from "./map";
-import Layout from "./layout";
+
 
 export default function Places({ markers, session, locArray, zoom }) {
     const [selected, setSelected] = useState(null);

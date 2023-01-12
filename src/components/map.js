@@ -4,7 +4,6 @@ import Map, { Marker, Popup, ViewState } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
-import { createCrosswalk } from "../utils/db/crosswalk";
 import axios from "axios";
 
 export default function MapComponent({ markers, session, locArray }) {

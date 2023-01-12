@@ -12,7 +12,6 @@ import { authOptions } from "../api/auth/[...nextauth]"
 
 export default function Home({ markers, loc }) {
     const { data: session, status } = useSession()
-    console.log(loc)
 
     const locArray = loc.split(",")
   
