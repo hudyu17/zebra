@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
 import axios from "axios";
+import CrosswalkPanel from "./crosswalkPanel";
 
 export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -95,20 +96,20 @@ export default function MapComponent({ markers, session, locArray }) {
           {addActive && cursorType==="crosshair" &&
             <button
               type="button"
-              className="cursor-not-allowed inline-flex w-40 items-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="cursor-not-allowed inline-flex w-48 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               disabled
             >
-              <p>select a location on the map</p>
+              <p className="text-align-center px-4">Select a location on the map</p>
             </button>
           } 
 
           {addActive && cursorType==="pointer" &&
               <button
               type="button"
-              className="inline-flex w-40 items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex w-48 items-center justify-center  rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleSelection}
             >
-              <p>confirm selection</p>
+              <p className="text-align-center">Confirm selection</p>
             </button>
           }      
         </div>
@@ -123,17 +124,19 @@ export default function MapComponent({ markers, session, locArray }) {
             cursor={cursorType}
           >
             {marker && 
-              <Marker
-                longitude={marker.lng}
-                latitude={marker.lat}
-                anchor="center"
-              />
+              <div>
+                <Marker
+                  longitude={marker.lng}
+                  latitude={marker.lat}
+                  anchor="center"
+                />
+              </div>
             }
 
             {existingMarkers}
           </Map>
         </div>
-
+        <CrosswalkPanel initialOpen={true}/>
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
   )
