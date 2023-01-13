@@ -64,7 +64,7 @@ export const PlacesAutocomplete = ({ setSelected }) => {
             onChange={(e) => setValue(e.target.value)}
             disabled={!ready}
             className="w-96 border-2 border-gray-800 p-4 rounded-md text-gray-900"
-            placeholder="Search an address"
+            placeholder="Jump to a location..."
           />
           <ComboboxPopover>
             <ComboboxList>

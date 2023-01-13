@@ -78,60 +78,63 @@ export default function MapComponent({ markers, session, locArray }) {
   );
 
   return (
-    <div className="text-black">
+    <div>
       <div className="absolute z-10 flex gap-6 p-6">
-      <SearchBox setSelected={setSelected}/>
-      {!addActive && 
-        <button
-          type="button"
-          className="inline-flex w-40 items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          onClick={handleAddClick}
-        >
-          <p>add a crosswalk</p>
-        </button>
-      }    
-      {addActive && cursorType==="crosshair" &&
-        <button
-          type="button"
-          className="cursor-not-allowed inline-flex w-40 items-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          disabled
-        >
-          <p>select a location on the map</p>
-        </button>
-      } 
-      {addActive && cursorType==="pointer" &&
-          <button
-          type="button"
-          className="inline-flex w-40 items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          onClick={handleSelection}
-        >
-          <p>confirm selection</p>
-        </button>
-      }      
-      </div>
-      <div ref={mapContainer} className=''>
-        <Map
-          {...viewState}
-          onMove={evt => setViewState(evt.viewState)}
-          style={{width: '100%', height: '100vh'}}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN}
-          onClick={(evt) => handleClick(evt)}
-          cursor={cursorType}
-        >
-          {marker && 
-            <Marker
-              longitude={marker.lng}
-              latitude={marker.lat}
-              anchor="center"
-            />
-          }
+          <SearchBox setSelected={setSelected}/>
+          
+          {!addActive && 
+            <button
+              type="button"
+              className="inline-flex w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleAddClick}
+            >
+              <p className="text-align-center">Suggest a crosswalk</p>
+            </button>
+          } 
 
-          {existingMarkers}
-        </Map>
-      </div>
+          {addActive && cursorType==="crosshair" &&
+            <button
+              type="button"
+              className="cursor-not-allowed inline-flex w-40 items-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              disabled
+            >
+              <p>select a location on the map</p>
+            </button>
+          } 
 
-      <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
+          {addActive && cursorType==="pointer" &&
+              <button
+              type="button"
+              className="inline-flex w-40 items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleSelection}
+            >
+              <p>confirm selection</p>
+            </button>
+          }      
+        </div>
+        <div ref={mapContainer} className=''>
+          <Map
+            {...viewState}
+            onMove={evt => setViewState(evt.viewState)}
+            style={{width: '100%', height: '100vh'}}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN}
+            onClick={(evt) => handleClick(evt)}
+            cursor={cursorType}
+          >
+            {marker && 
+              <Marker
+                longitude={marker.lng}
+                latitude={marker.lat}
+                anchor="center"
+              />
+            }
+
+            {existingMarkers}
+          </Map>
+        </div>
+
+        <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
   )
 }
