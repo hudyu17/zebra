@@ -1,9 +1,29 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 export default function CrosswalkPanel({ open, setOpen, marker, session }) {
+  const router = useRouter()
 
+  const handleSubmit = async () => {
+    setOpen(false)
+    
+    // add to db
+    const userId = session.user.email;
+    const lat = marker.lat;
+    const lng = marker.lng;
+
+    await axios.post("/api/db/createCrosswalk", {
+      userId, lat, lng
+    }).then(response => {
+      console.log(response.data.redirect)
+    })
+    
+    // router.push(`/${marker.lng},${marker.lat},15`)
+
+  }
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -170,6 +190,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                               <button
                                 type="submit"
                                 className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                onClick={handleSubmit}
                               >
                                 Submit
                               </button>

@@ -6,7 +6,7 @@ export default async function createCrosswalk(req, res) {
     let currDate = new Date();
     const isoDate = currDate.toISOString()
 
-    console.log(userId, lat, lng)
+    // console.log(userId, lat, lng)
 
     const result = await prisma.crosswalk.create({
         data: {

@@ -66,7 +66,7 @@ export const PlacesAutocomplete = ({ setSelected }) => {
             className="w-96 border-2 border-gray-800 p-4 rounded-md text-gray-900"
             placeholder="Jump to a location..."
           />
-          <ComboboxPopover>
+          <ComboboxPopover className="mt-4 rounded-md">
             <ComboboxList>
               {status === "OK" &&
                 data.map(({ place_id, description }) => (

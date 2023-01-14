@@ -106,7 +106,7 @@ export default function MapComponent({ markers, session, locArray }) {
             </button>
           } 
 
-          {addActive && cursorType==="crosshair" &&
+          {addActive &&
             <button
               type="button"
               className="cursor-not-allowed inline-flex w-44 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -116,7 +116,7 @@ export default function MapComponent({ markers, session, locArray }) {
             </button>
           } 
 
-          {addActive && cursorType==="pointer" &&
+          {/* {addActive && cursorType==="pointer" &&
               <button
               type="button"
               className="inline-flex w-44 items-center justify-center  rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -124,7 +124,7 @@ export default function MapComponent({ markers, session, locArray }) {
             >
               <p className="text-align-center">Confirm selection</p>
             </button>
-          }      
+          }       */}
 
           {addActive &&
             <button
