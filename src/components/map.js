@@ -99,7 +99,7 @@ export default function MapComponent({ markers, session, locArray }) {
           {!addActive && 
             <button
               type="button"
-              className="inline-flex w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex w-44 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleAddClick}
             >
               <p className="text-align-center">Suggest your own crosswalk</p>
@@ -109,7 +109,7 @@ export default function MapComponent({ markers, session, locArray }) {
           {addActive && cursorType==="crosshair" &&
             <button
               type="button"
-              className="cursor-not-allowed inline-flex w-48 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="cursor-not-allowed inline-flex w-44 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               disabled
             >
               <p className="text-align-center px-4">Select a location on the map</p>
@@ -119,7 +119,7 @@ export default function MapComponent({ markers, session, locArray }) {
           {addActive && cursorType==="pointer" &&
               <button
               type="button"
-              className="inline-flex w-48 items-center justify-center  rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex w-44 items-center justify-center  rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleSelection}
             >
               <p className="text-align-center">Confirm selection</p>
@@ -159,7 +159,7 @@ export default function MapComponent({ markers, session, locArray }) {
             {existingMarkers}
           </Map>
         </div>
-        <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker}/>
+        <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session}/>
         
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
