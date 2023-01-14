@@ -2,12 +2,13 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 
 export default function CrosswalkPanel({ open, setOpen, marker, session }) {
-  const router = useRouter()
+  // const router = useRouter()
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setOpen(false)
     
     // add to db
@@ -17,11 +18,13 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
 
     await axios.post("/api/db/createCrosswalk", {
       userId, lat, lng
-    }).then(response => {
-      console.log(response.data.redirect)
+    }).then(res => {
+      Router.push(`/${marker.lng},${marker.lat},15`)
+      // window.location.reload();
     })
+    // console.log('submitted')
     
-    // router.push(`/${marker.lng},${marker.lat},15`)
+    
 
   }
   return (
