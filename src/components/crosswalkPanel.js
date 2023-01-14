@@ -2,12 +2,22 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
-export default function CrosswalkPanel({initialOpen}) {
-  const [open, setOpen] = useState(initialOpen)
+export default function CrosswalkPanel({ open, setOpen, marker }) {
 
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </Transition.Child>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -26,7 +36,7 @@ export default function CrosswalkPanel({initialOpen}) {
                   <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-lg font-medium text-gray-900">Panel title</Dialog.Title>
+                        <Dialog.Title className="text-lg font-medium text-gray-900">Suggest a crosswalk</Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
@@ -41,9 +51,8 @@ export default function CrosswalkPanel({initialOpen}) {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       {/* Replace with your content */}
-                      <div className="absolute inset-0 px-4 sm:px-6">
-                        <div className="h-full border-2 border-dashed border-gray-200" aria-hidden="true" />
-                      </div>
+                        use tailwind form
+                        {marker && <p>{marker.lat}</p>}
                       {/* /End replace */}
                     </div>
                   </div>

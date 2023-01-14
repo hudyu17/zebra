@@ -2,13 +2,13 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react';
 
 export default function Layout({ main }) {
-    // const {data: session} = useSession()
+    const {data: session} = useSession()
 
     // offline dev
-    const session = {
-        expires: "1",
-        user: { email: "a", name: "Delta", image: "c" },
-      }
+    // const session = {
+    //     expires: "1",
+    //     user: { email: "a", name: "Delta", image: "c" },
+    //   }
 
     const authenticated = !! session
 
@@ -27,7 +27,7 @@ export default function Layout({ main }) {
                     </div>
                         </Link>
                     
-                    <nav className="mt-5 flex-1 space-y-1 bg-gray-800 px-2" aria-label="Sidebar">
+                    <nav className="mt-5 flex-1 space-y-1 bg-gray-800 px-2 shadow-xl" aria-label="Sidebar">
                         
                         
                         {authenticated ?
@@ -50,6 +50,7 @@ export default function Layout({ main }) {
                         </Link>}
                     </nav>
                 </div>
+                {authenticated &&
                 <div className="flex flex-shrink-0 bg-gray-700 p-4">
                     <a href="#" className="group block w-full flex-shrink-0">
                     <div className="flex items-center">
@@ -67,6 +68,7 @@ export default function Layout({ main }) {
                     </div>
                     </a>
                 </div>
+                }
             </div>
 
 

@@ -9,6 +9,7 @@ import CrosswalkPanel from "./crosswalkPanel";
 
 export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(false)
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [cursorType, setCursorType] = useState('pointer')
@@ -30,6 +31,7 @@ export default function MapComponent({ markers, session, locArray }) {
 
       // temp marker, not added to db
       setMarker({lat: evt.lngLat.lat, lng: evt.lngLat.lng})
+      setPanelOpen(true)
     }
   }
 
@@ -41,6 +43,11 @@ export default function MapComponent({ markers, session, locArray }) {
     }
     setAddActive(true)
     setCursorType('crosshair')
+  }
+
+  const handleCancel = () => {
+    setAddActive(false)
+    setCursorType('pointer')
   }
 
   const handleSelection = async () => {
@@ -64,6 +71,12 @@ export default function MapComponent({ markers, session, locArray }) {
         console.log(selected)
     }
   }, [selected])
+
+  useEffect(() => {
+    if (!panelOpen && addActive) {
+      setCursorType('crosshair')
+    }
+  })
 
   const existingMarkers = useMemo(
     () =>
@@ -89,7 +102,7 @@ export default function MapComponent({ markers, session, locArray }) {
               className="inline-flex w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleAddClick}
             >
-              <p className="text-align-center">Suggest a crosswalk</p>
+              <p className="text-align-center">Suggest your own crosswalk</p>
             </button>
           } 
 
@@ -112,6 +125,16 @@ export default function MapComponent({ markers, session, locArray }) {
               <p className="text-align-center">Confirm selection</p>
             </button>
           }      
+
+          {addActive &&
+            <button
+              type="button"
+              className="inline-flex w-24 items-center justify-center rounded-md border border-transparent bg-red-400 px-4 hover:bg-red-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleCancel}
+            >
+              <p className="text-align-center px-4">Cancel</p>
+            </button>
+          }
         </div>
         <div ref={mapContainer} className=''>
           <Map
@@ -136,7 +159,8 @@ export default function MapComponent({ markers, session, locArray }) {
             {existingMarkers}
           </Map>
         </div>
-        <CrosswalkPanel initialOpen={true}/>
+        <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker}/>
+        
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
   )
