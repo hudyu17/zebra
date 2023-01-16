@@ -7,7 +7,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
   const [form, setForm] = useState({
     address: '',
     description: '',
-    shareInfo: '',
+    shareInfo: 'nameImage',
   });
 
   const handleChange = (e) => {
@@ -21,14 +21,23 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
     // close the panel
     setOpen(false)
     
+    // dirty validation
+    if (!form.address || !form.description) {
+      alert('fill in the damn form')
+    }
+
     // add to db
     const userId = session.user.email;
     const lat = marker.lat;
     const lng = marker.lng;
+    const address = form.address;
+    const description = form.description;
+    const shareInfo = form.shareInfo;
+
     console.log(form)
 
     // await axios.post("/api/db/createCrosswalk", {
-    //   userId, lat, lng
+    //   userId, lat, lng, address, description, shareInfo
     // }).then(res => {
     //   // jump to new marker location
     //   window.location.replace(`/${marker.lng},${marker.lat},15`)
@@ -93,7 +102,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                               
                               <div className="sm:col-span-6">
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                  Give your crosswalk a descriptive address
+                                  Give your crosswalk a descriptive address *
                                 </label>
                                 <div className="mt-1">
                                   <input
@@ -104,6 +113,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                     placeholder="e.g. intersection of Avenue and Cumberland"
                                     value={form.address}
                                     onChange={handleChange}
+                                    required
                                   />
                                 </div>
                               </div>
@@ -111,7 +121,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
 
                               <div>
                                 <label htmlFor="about" className="block text-sm font-medium text-gray-700">
-                                  Describe why this location needs a new crosswalk
+                                  Describe why this location needs a new crosswalk *
                                 </label>
                                 <div className="mt-1">
                                   <textarea
@@ -175,7 +185,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                               <div>
                                 <div>
                                   <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-                                    What information would you like to share pubicly alongside your suggested crosswalk?
+                                    What information would you like to share pubicly alongside your suggested crosswalk? *
                                   </label>
                                   <select
                                     id="shareInfo"
@@ -184,21 +194,24 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                     value={form.shareInfo}
                                     onChange={handleChange}
                                   >
-                                    <option>Name ({session.user.name}) and Profile Image</option>
-                                    <option>Name only ({session.user.name})</option>
-                                    <option>Anonymous</option>
+                                    <option value='nameImage'>Name ({session.user.name}) and Profile Image</option>
+                                    <option value='nameOnly'>Name only ({session.user.name})</option>
+                                    <option value='anon'>Anonymous</option>
                                   </select>
                                 </div>
                                
                               </div>
                               <div>
-                                <p className="block text-sm font-medium text-gray-700">Your suggestion will be live in a moment.</p>
+                                <p className="block text-sm font-medium text-gray-700">Your suggestion will be live shortly after you submit.</p>
                                 <p className="block text-sm text-gray-500">In case of any issues, we'll contact you at: <span className='text-gray-700 font-medium'>{session.user.email}</span></p>
+                                
                               </div>
                             </div>
                           </div>
 
                           <div className="pt-5">
+                            <div className='flex justify-between'>
+                            <p className="block text-sm text-gray-400 italic">* Required</p>
                             <div className="flex justify-end">
                               <button
                                 type="button"
@@ -214,6 +227,8 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                 Submit
                               </button>
                             </div>
+                            </div>
+                            
                           </div>
                         </form>
                       {/* /End replace */}

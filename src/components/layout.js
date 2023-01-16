@@ -2,13 +2,13 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react';
 
 export default function Layout({ main }) {
-    const {data: session} = useSession()
+    // const {data: session} = useSession()
 
     // offline dev
-    // const session = {
-    //     expires: "1",
-    //     user: { email: "a", name: "Delta", image: "c" },
-    //   }
+    const session = {
+        expires: "1",
+        user: { email: "a", name: "Delta", image: "c" },
+      }
 
     const authenticated = !! session
 
