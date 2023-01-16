@@ -4,7 +4,15 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 
 export default function CrosswalkPanel({ open, setOpen, marker, session }) {
-  // const router = useRouter()
+  const [form, setForm] = useState({
+    address: '',
+    description: '',
+    shareInfo: '',
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
 
   const handleSubmit = async (e) => {
     // prevent automatic redirect
@@ -17,17 +25,17 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
     const userId = session.user.email;
     const lat = marker.lat;
     const lng = marker.lng;
-    console.log(e.target.value)
+    console.log(form)
 
-    await axios.post("/api/db/createCrosswalk", {
-      userId, lat, lng
-    }).then(res => {
-      // jump to new marker location
-      window.location.replace(`/${marker.lng},${marker.lat},15`)
-    }).catch(error => {
-      console.log(error.response.data)
-      alert('try again')
-    })
+    // await axios.post("/api/db/createCrosswalk", {
+    //   userId, lat, lng
+    // }).then(res => {
+    //   // jump to new marker location
+    //   window.location.replace(`/${marker.lng},${marker.lat},15`)
+    // }).catch(error => {
+    //   console.log(error.response.data)
+    //   alert('try again')
+    // })
   }
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -91,8 +99,11 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                   <input
                                     type="text"
                                     id="address"
+                                    name="address"
                                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     placeholder="e.g. intersection of Avenue and Cumberland"
+                                    value={form.address}
+                                    onChange={handleChange}
                                   />
                                 </div>
                               </div>
@@ -104,11 +115,13 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                 </label>
                                 <div className="mt-1">
                                   <textarea
-                                    id="about"
-                                    name="about"
+                                    id="description"
+                                    name="description"
                                     rows={3}
                                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     placeholder="e.g. lots of people cross from Cumberland to get breakfast at the Hyatt and cars are absolutely flooring it down Avenue"
+                                    value={form.description}
+                                    onChange={handleChange}
                                   />
                                 </div>
                                   {/* <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p> */}
@@ -165,10 +178,11 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                     What information would you like to share pubicly alongside your suggested crosswalk?
                                   </label>
                                   <select
-                                    id="location"
-                                    name="location"
+                                    id="shareInfo"
+                                    name="shareInfo"
                                     className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    // defaultValue=""
+                                    value={form.shareInfo}
+                                    onChange={handleChange}
                                   >
                                     <option>Name ({session.user.name}) and Profile Image</option>
                                     <option>Name only ({session.user.name})</option>
