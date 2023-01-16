@@ -11,13 +11,15 @@ datasource db {
 }
 
 model Crosswalk {
-  id        Int      @id @default(autoincrement())
-  userId    String   // email from next auth
-  latitude  Float
-  longitude Float
-  address   String
-  votes     Int
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  userId      String   // email from next auth
+  latitude    Float
+  longitude   Float
+  address     String
+  description String
+  votes       Int
+  shareInfo   String
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @default(now())
   @@index([userId], name: "crosswalks.userId")
 }

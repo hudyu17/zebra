@@ -2,30 +2,32 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import Router from 'next/router'
 
 export default function CrosswalkPanel({ open, setOpen, marker, session }) {
   // const router = useRouter()
 
   const handleSubmit = async (e) => {
+    // prevent automatic redirect
     e.preventDefault();
+
+    // close the panel
     setOpen(false)
     
     // add to db
     const userId = session.user.email;
     const lat = marker.lat;
     const lng = marker.lng;
+    console.log(e.target.value)
 
     await axios.post("/api/db/createCrosswalk", {
       userId, lat, lng
     }).then(res => {
-      Router.push(`/${marker.lng},${marker.lat},15`)
-      // window.location.reload();
+      // jump to new marker location
+      window.location.replace(`/${marker.lng},${marker.lat},15`)
+    }).catch(error => {
+      console.log(error.response.data)
+      alert('try again')
     })
-    // console.log('submitted')
-    
-    
-
   }
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -81,7 +83,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                           <div className="space-y-8 divide-y divide-gray-200">
                             <div className="space-y-6">
                               
-                                <div className="sm:col-span-6">
+                              <div className="sm:col-span-6">
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                   Give your crosswalk a descriptive address
                                 </label>

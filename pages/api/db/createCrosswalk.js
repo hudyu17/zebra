@@ -1,24 +1,34 @@
 import { prisma } from "../../../src/prisma";
 
 export default async function createCrosswalk(req, res) {
-    const { userId, lat, lng } = req.body;
+    const { 
+        userId, 
+        address,
+        description,
+        // image
+        lat, 
+        lng,
+        shareInfo, // nameImage, nameOnly, anon
+    } = req.body;
     
     let currDate = new Date();
     const isoDate = currDate.toISOString()
 
-    // console.log(userId, lat, lng)
-
-    const result = await prisma.crosswalk.create({
-        data: {
-            userId: userId,
-            latitude: lat,
-            longitude: lng,
-            address: 'test_address',
-            votes: 0,
-            createdAt: isoDate,
-            updatedAt: isoDate
-        }
-      })
-
-    res.json(result);
+    try {
+        const result = await prisma.crosswalk.create({
+            data: {
+                userId: userId,
+                latitude: lat,
+                longitude: lng,
+                address: address,
+                votes: 0,
+                shareInfo: shareInfo,
+                createdAt: isoDate,
+                updatedAt: isoDate
+            }
+          })
+        res.json(result);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 }
