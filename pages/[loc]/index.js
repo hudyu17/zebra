@@ -11,13 +11,13 @@ import { authOptions } from "../api/auth/[...nextauth]"
 
 
 export default function Home({ markers, loc }) {
-    // const { data: session, status } = useSession()
+    const { data: session, status } = useSession()
     
     // offline dev
-    const session = {
-      expires: "1",
-      user: { email: "a", name: "Delta", image: "c" },
-    }
+    // const session = {
+    //   expires: "1",
+    //   user: { email: "a", name: "Delta", image: "c" },
+    // }
 
     const locArray = loc.split(",")
   
@@ -41,12 +41,12 @@ export default function Home({ markers, loc }) {
 
 export async function getServerSideProps(context) {
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
-  // const markers = await prisma.crosswalk.findMany();
+  const markers = await prisma.crosswalk.findMany();
 
   const loc = context.query.loc;
 
   // for offline dev
-  const markers = []
+  // const markers = []
   
   return {
     props: {

@@ -36,15 +36,15 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
 
     console.log(form)
 
-    // await axios.post("/api/db/createCrosswalk", {
-    //   userId, lat, lng, address, description, shareInfo
-    // }).then(res => {
-    //   // jump to new marker location
-    //   window.location.replace(`/${marker.lng},${marker.lat},15`)
-    // }).catch(error => {
-    //   console.log(error.response.data)
-    //   alert('try again')
-    // })
+    await axios.post("/api/db/createCrosswalk", {
+      userId, lat, lng, address, description, shareInfo
+    }).then(res => {
+      // jump to new marker location
+      window.location.replace(`/${marker.lng},${marker.lat},15`)
+    }).catch(error => {
+      console.log(error.response.data)
+      alert('try again')
+    })
   }
   return (
     <Transition.Root show={open} as={Fragment}>

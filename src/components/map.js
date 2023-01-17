@@ -6,10 +6,13 @@ import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
 import axios from "axios";
 import CrosswalkPanel from "./crosswalkPanel";
+import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
 
 export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
+  const [popupInfo, setPopupInfo] = useState(null);
+  const [votes, setVotes] = useState(null);
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [cursorType, setCursorType] = useState('pointer')
@@ -50,6 +53,22 @@ export default function MapComponent({ markers, session, locArray }) {
     setCursorType('pointer')
   }
 
+  const handleUpvote = async () => {
+    const markerId = popupInfo.id;
+    await axios.post("/api/db/upvoteCrosswalk", {
+      markerId
+    })
+    setVotes(votes + 1)
+  }
+
+  const handleDownvote = async () => {
+    const markerId = popupInfo.id;
+    await axios.post("/api/db/downvoteCrosswalk", {
+      markerId
+    })
+    setVotes(votes - 1)
+  }
+
   const handleSelection = async () => {
     setAddActive(false)
     
@@ -86,6 +105,12 @@ export default function MapComponent({ markers, session, locArray }) {
           longitude={marker.longitude}
           latitude={marker.latitude}
           anchor="center"
+          onClick={e => {
+            // prevent autoclose
+            e.originalEvent.stopPropagation();
+            setPopupInfo(marker);
+            setVotes(marker.votes);
+          }}
         />
       )),
     []
@@ -157,6 +182,24 @@ export default function MapComponent({ markers, session, locArray }) {
             }
 
             {existingMarkers}
+
+            {popupInfo && (
+              <Popup
+                anchor="top"
+                longitude={Number(popupInfo.longitude)}
+                latitude={Number(popupInfo.latitude)}
+                onClose={() => setPopupInfo(null)}
+              >
+                <div>
+                  <p>{popupInfo.address}</p>
+                  <p>{popupInfo.description}</p>
+                  <p>{votes}</p>
+                  <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={handleUpvote}/>
+                  <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/>
+                </div>
+                <img width="100%" src={popupInfo.image} />
+              </Popup>
+            )}
           </Map>
         </div>
         <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session}/>
