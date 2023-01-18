@@ -13,38 +13,14 @@ export default function MyCrosswalks({ crosswalkData }) {
     return (
         <Layout main={
             <div className="p-6 bg-slate-100 h-full">
-                <p>my crosswalks</p>
-                <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <h1 className="text-lg">My Crosswalks</h1>
+                <ul role="list" className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 auto-rows-max">
                 {crosswalkData.map((crosswalk) => (
                 <li key={crosswalk.id} className="col-span-1  rounded-lg bg-white shadow">
-                <div className="flex w-full justify-between flex-col space-x-6 p-6 divide-y divide-gray-200">
-                  <div className="">
-                    <div className="flex items-center space-x-3">
-                      <h3 className=" text-sm font-medium text-gray-900">{crosswalk.address}</h3>
-                      
-                    </div>
-                    <p className="mt-1 text-sm text-gray-500">{crosswalk.description}</p>
-                  </div>
-                  <div className="-mt-px flex divide-x divide-gray-200">
-                    <div className="flex w-0 flex-1">
-                      <a
-                        href={''}
-                        className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
-                      >
-                        <EnvelopeIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                        <span className="ml-3">Email</span>
-                      </a>
-                    </div>
-                    <div className="-ml-px flex w-0 flex-1">
-                      <a
-                        href={''}
-                        className="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
-                      >
-                        <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                        <span className="ml-3">Call</span>
-                      </a>
-                    </div>
-                </div>
+                <div className="p-4 flex flex-col gap-4 h-full">
+                  <h1>{crosswalk.address}</h1>
+                  <p className="text-sm">{crosswalk.description}</p>
+                  <p className="mt-auto">{crosswalk.votes} likes</p>
                 </div>
                 
                 </li>
@@ -73,11 +49,39 @@ export async function getServerSideProps(context) {
             userId: session.user.email
         }
     })
+
+    // const offlineData = [
+    //   {
+    //     id: 1,
+    //     userId: 'hengjeung.yuen@gmail.com',
+    //     latitude: 43.66601359148913,
+    //     longitude: -79.4612869274421,
+    //     address: 'Avenue and Cumberland',
+    //     description: 'I want breakfast',
+    //     votes: 4,
+    //     shareInfo: 'nameImage',
+    //     createdAt: '2023-01-16T22:13:23.810Z',
+    //     updatedAt: '2023-01-16T22:13:23.810Z'
+    //   },
+    //   {
+    //     id: 2,
+    //     userId: 'hengjeung.yuen@gmail.com',
+    //     latitude: 43.67081764090068,
+    //     longitude: -79.38419891605797,
+    //     address: 'Opposite the MC office',
+    //     description: "I'm too lazy to take the correct exit out of bloor yonge so i risk my life outside the starbux",
+    //     votes: 0,
+    //     shareInfo: 'nameOnly',
+    //     createdAt: '2023-01-17T23:36:45.345Z',
+    //     updatedAt: '2023-01-17T23:36:45.345Z'
+    //   }
+    // ]
   
     return {
       props: {
         session,
-        crosswalkData: JSON.parse(JSON.stringify(data))
+        crosswalkData: JSON.parse(JSON.stringify(data)),
+        // crosswalkData: offlineData
       },
     }
   }
