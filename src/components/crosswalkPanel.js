@@ -3,11 +3,32 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 
-export default function CrosswalkPanel({ open, setOpen, marker, session }) {
-  const [form, setForm] = useState({
-    address: '',
-    description: '',
-    shareInfo: 'nameImage',
+export default function CrosswalkPanel({ open, setOpen, marker, session, edit }) {
+  // edit is a bool; false = new crosswalk
+  console.log(marker)
+  
+  // const [form, setForm] = useState({
+  //   address: '', // TODO idk what this does if null but idea is take marker value if possible
+  //   description: '',
+  //   shareInfo: 'nameImage',
+  // });
+
+  // const [form, setForm] = useState(marker ? {address: marker.address, description: marker.description, shareInfo: marker.shareInfo}:{address: '', description: '', shareInfo: ''})
+
+  const [form, setForm] = useState(() => {
+    if (!edit) {
+      return {
+        address: '',
+        description: '',
+        shareInfo: ''
+      }
+    }
+
+    return {
+      address: marker.address,
+      description: marker.description,
+      shareInfo: marker.shareInfo
+    };
   });
 
   const handleChange = (e) => {
@@ -26,7 +47,6 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
       alert('fill in the damn form')
     }
 
-    // add to db
     const userId = session.user.email;
     const lat = marker.lat;
     const lng = marker.lng;
@@ -34,17 +54,30 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
     const description = form.description;
     const shareInfo = form.shareInfo;
 
-    console.log(form)
-
-    await axios.post("/api/db/createCrosswalk", {
-      userId, lat, lng, address, description, shareInfo
-    }).then(res => {
-      // jump to new marker location
-      window.location.replace(`/${marker.lng},${marker.lat},15`)
-    }).catch(error => {
-      console.log(error.response.data)
-      alert('try again')
-    })
+    let markerId;
+    if (marker && edit) {
+      markerId = marker.id
+    }
+  
+    // add to db if new entry
+    if (!edit) {
+      await axios.post("/api/db/createCrosswalk", {
+        userId, lat, lng, address, description, shareInfo
+      }).then(res => {
+        // jump to new marker location
+        window.location.replace(`/${marker.lng},${marker.lat},15`)
+      }).catch(error => {
+        console.log(error.response.data)
+        alert('try again')
+      })
+    } else {
+      // update in db if not new entry
+      await axios.post("/api/db/updateCrosswalk", {
+        userId, markerId, address, description, shareInfo
+      })
+    }
+    
+    
   }
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -224,7 +257,8 @@ export default function CrosswalkPanel({ open, setOpen, marker, session }) {
                                 className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 onClick={handleSubmit}
                               >
-                                Submit
+                                {edit ? <p>Submit Changes</p> : <p>Submit</p>}
+                                {/* Submit */}
                               </button>
                             </div>
                             </div>

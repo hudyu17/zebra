@@ -202,7 +202,7 @@ export default function MapComponent({ markers, session, locArray }) {
             )}
           </Map>
         </div>
-        <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session}/>
+        <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session} edit={false}/>
         
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
     </div>
