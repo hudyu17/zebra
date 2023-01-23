@@ -12,6 +12,9 @@ export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
+  const [popupUpvoted, setPopupUpvoted] = useState(null);
+  const [popupDownvoted, setPopupDownvoted] = useState(null);
+
   const [votes, setVotes] = useState(null);
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
@@ -28,7 +31,7 @@ export default function MapComponent({ markers, session, locArray }) {
   const mapContainer = useRef(null);
 
   const handleClick = (evt) => {
-    console.log(evt.lngLat)
+    // console.log(evt.lngLat)
     if (cursorType === 'crosshair') {
       setCursorType('pointer')
 
@@ -37,6 +40,8 @@ export default function MapComponent({ markers, session, locArray }) {
       setPanelOpen(true)
     }
   }
+
+  
 
   const handleAddClick = () => {
     if (!session) {
@@ -51,6 +56,19 @@ export default function MapComponent({ markers, session, locArray }) {
   const handleCancel = () => {
     setAddActive(false)
     setCursorType('pointer')
+  }
+
+  const checkCrosswalk = async (marker) => {
+    const markerId = marker.id;
+    const userId = session.user.email;
+
+    await axios.post("/api/db/checkCrosswalk", {
+      userId, markerId
+    }).then(res => {
+      console.log(res.data);
+      setPopupUpvoted(res.upvoted);
+      setPopupDownvoted(res.downvoted);
+    })
   }
 
   const handleUpvote = async () => {
@@ -113,6 +131,8 @@ export default function MapComponent({ markers, session, locArray }) {
             e.originalEvent.stopPropagation();
             setPopupInfo(marker);
             setVotes(marker.votes);
+            checkCrosswalk(marker);
+            console.log(popupUpvoted)
           }}
         />
       )),
@@ -187,7 +207,12 @@ export default function MapComponent({ markers, session, locArray }) {
                   <p>{popupInfo.address}</p>
                   <p>{popupInfo.description}</p>
                   <p>{votes}</p>
+                  {popupUpvoted ? 
+                  <HandThumbUpIcon className="h-6 w-6 fill-blue-500 cursor-pointer" onClick={handleUpvote}/>
+                  :
                   <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={handleUpvote}/>
+                }
+                  
                   <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/>
                 </div>
                 <img width="100%" src={popupInfo.image} />
