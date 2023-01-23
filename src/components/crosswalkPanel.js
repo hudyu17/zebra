@@ -5,15 +5,12 @@ import axios from 'axios'
 
 export default function CrosswalkPanel({ open, setOpen, marker, session, edit }) {
   // edit is a bool; false = new crosswalk
-  console.log(marker)
   
   // const [form, setForm] = useState({
   //   address: '', // TODO idk what this does if null but idea is take marker value if possible
   //   description: '',
   //   shareInfo: 'nameImage',
   // });
-
-  // const [form, setForm] = useState(marker ? {address: marker.address, description: marker.description, shareInfo: marker.shareInfo}:{address: '', description: '', shareInfo: ''})
 
   const [form, setForm] = useState(() => {
     if (!edit) {
@@ -73,13 +70,17 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
     } else {
       // update in db if not new entry
       await axios.post("/api/db/updateCrosswalk", {
-        userId, markerId, address, description, shareInfo
+        markerId, address, description, shareInfo
+      }).then(res => {
+        window.location.replace('/myCrosswalks')
+      }).catch(error => {
+        console.log(error.response.data)
       })
     }
     
     
   }
-  return (
+  return ( session &&
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
       <Transition.Child

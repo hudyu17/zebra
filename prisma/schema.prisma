@@ -23,3 +23,10 @@ model Crosswalk {
   updatedAt   DateTime @default(now())
   @@index([userId], name: "crosswalks.userId")
 }
+
+model UserVote {
+  id          Int      @id @default(autoincrement())
+  userId      String   @unique
+  upvoted     Int[]    // crosswalk IDs, but not relation
+  downvoted   Int[]
+}

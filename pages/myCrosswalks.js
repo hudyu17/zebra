@@ -100,7 +100,7 @@ export default function MyCrosswalks({ crosswalkData }) {
                 </ul>
                 {currCrosswalk && 
                   <div>
-                    <DeleteModal key={currCrosswalk.id} open={deleteOpen} setOpen={setDeleteOpen}/>
+                    <DeleteModal key={currCrosswalk.id} open={deleteOpen} setOpen={setDeleteOpen} marker={currCrosswalk}/>
                     <CrosswalkPanel key={currCrosswalk.id} open={panelOpen} setOpen={setPanelOpen} marker={currCrosswalk} session={session} edit={true}/>
                   </div>
                 }

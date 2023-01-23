@@ -1,13 +1,24 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 
-export default function DeleteModal({ open, setOpen }) {
+export default function DeleteModal({ open, setOpen, marker }) {
 
   const cancelButtonRef = useRef(null)
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    setOpen(false)
+    const markerId = marker.id
+
     // call api route to delete
+    await axios.delete(`/api/db/delete/${markerId}`)
+    .then(res => {
+      window.location.replace('/myCrosswalks')
+    })
+    .catch(error => {
+      console.log(error.response.data)
+    })
   }
 
   return (
@@ -57,7 +68,7 @@ export default function DeleteModal({ open, setOpen }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={handleDelete}
                   >
                     Deactivate
                   </button>

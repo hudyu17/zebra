@@ -2,7 +2,7 @@ import { prisma } from "../../../src/prisma";
 
 export default async function updateCrosswalk(req, res) {
     const { 
-        userId, 
+        // userId, 
         markerId,
         address,
         description,
@@ -15,7 +15,7 @@ export default async function updateCrosswalk(req, res) {
     try {
         const updateCrosswalk = await prisma.crosswalk.update({
             where: {
-                userId: userId,
+                // userId: userId,
                 id: markerId
             },
             data: {
@@ -25,7 +25,7 @@ export default async function updateCrosswalk(req, res) {
                 updatedAt: isoDate
             }
           })
-        res.json(result);
+        res.json(updateCrosswalk);
     } catch (error) {
         res.status(400).send(error.message);
     }

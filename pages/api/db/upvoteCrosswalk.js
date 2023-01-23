@@ -1,7 +1,7 @@
 import { prisma } from "../../../src/prisma";
 
 export default async function upvoteCrosswalk(req, res) {
-    const { markerId } = req.body;
+    const { userId, markerId } = req.body;
 
     try {
         const update = await prisma.crosswalk.update({
@@ -14,6 +14,34 @@ export default async function upvoteCrosswalk(req, res) {
               }
             },
           })
+        
+        // update uservote
+        const user = await prisma.userVote.findUnique({
+          where: {
+            userId: userId
+          }
+        })
+
+        if (user) {
+          const updateUserVote = await prisma.userVote.update({
+            where: {
+              userId: userId
+            },
+            data: {
+              upvoted: {
+                push: markerId
+              }
+            }
+          })
+        } else {
+          const createUserVote = await prisma.userVote.create({
+            data: {
+              userId: userId,
+              upvoted: [markerId]
+            }
+          })
+        }
+        
         res.json(update);
     } catch (error) {
         res.status(400).send(error.message);

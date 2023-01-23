@@ -54,32 +54,35 @@ export default function MapComponent({ markers, session, locArray }) {
   }
 
   const handleUpvote = async () => {
+    if (!session) {
+      console.log('need auth')
+      setModalOpen(true)
+      return
+    }
+
     const markerId = popupInfo.id;
+    const userId = session.user.email;
+
     await axios.post("/api/db/upvoteCrosswalk", {
-      markerId
+      userId, markerId
+    }).catch(error => {
+      console.log(error.response.data)
     })
     setVotes(votes + 1)
   }
 
   const handleDownvote = async () => {
+    if (!session) {
+      console.log('need auth')
+      setModalOpen(true)
+      return
+    }
+
     const markerId = popupInfo.id;
     await axios.post("/api/db/downvoteCrosswalk", {
       markerId
     })
     setVotes(votes - 1)
-  }
-
-  const handleSelection = async () => {
-    setAddActive(false)
-    
-    // add to db
-    const userId = session.user.email;
-    const lat = marker.lat;
-    const lng = marker.lng;
-
-    await axios.post("/api/db/createCrosswalk", {
-      userId, lat, lng
-    });
   }
 
   useEffect(() => {
@@ -140,16 +143,6 @@ export default function MapComponent({ markers, session, locArray }) {
               <p className="text-align-center px-4">Select a location on the map</p>
             </button>
           } 
-
-          {/* {addActive && cursorType==="pointer" &&
-              <button
-              type="button"
-              className="inline-flex w-44 items-center justify-center  rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              onClick={handleSelection}
-            >
-              <p className="text-align-center">Confirm selection</p>
-            </button>
-          }       */}
 
           {addActive &&
             <button

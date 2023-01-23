@@ -1,15 +1,11 @@
 import { prisma } from "../../../src/prisma";
 
 export default async function deleteCrosswalk(req, res) {
-    const { 
-        userId, // just another weak check
-        markerId
-    } = req.body;
+    const { markerId } = req.query;
 
     try {
         const deleteCrosswalk = await prisma.crosswalk.delete({
             where: {
-                userId: userId,
                 id: markerId
             }
           })
