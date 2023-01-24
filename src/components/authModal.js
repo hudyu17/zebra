@@ -43,7 +43,7 @@ export default function AuthModal({ open, setOpen, viewState }) {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Join zebra and suggest your own crosswalk.
+                        Join to vote on crosswalks and suggest your own.
                       </p>
                     </div>
                   </div>

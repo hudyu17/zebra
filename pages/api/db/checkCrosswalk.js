@@ -9,17 +9,16 @@ export default async function checkCrosswalk(req, res) {
                 userId: userId
             },
             select: {
-                upvoted: true,
-                downvoted: true,
+                upvoted: true            
             }
         })
         if (!voted) {
-            res.json({upvoted: false, downvoted: false})
+            res.json({upvoted: false})
         } else {
             if (voted.upvoted.includes(markerId)) {
-                res.json({upvoted: true, downvoted: false})
+                res.json({upvoted: true})
             } else {
-                res.json({upvoted: false, downvoted: true})
+                res.json({upvoted: false})
             }
         }
 

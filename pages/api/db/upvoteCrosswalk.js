@@ -23,7 +23,7 @@ export default async function upvoteCrosswalk(req, res) {
         })
 
         if (user) {
-          const updateUserVote = await prisma.userVote.update({
+          await prisma.userVote.update({
             where: {
               userId: userId
             },
@@ -34,7 +34,7 @@ export default async function upvoteCrosswalk(req, res) {
             }
           })
         } else {
-          const createUserVote = await prisma.userVote.create({
+          await prisma.userVote.create({
             data: {
               userId: userId,
               upvoted: [markerId]

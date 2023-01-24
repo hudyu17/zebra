@@ -59,16 +59,23 @@ export default function MapComponent({ markers, session, locArray }) {
   }
 
   const checkCrosswalk = async (marker) => {
-    const markerId = marker.id;
-    const userId = session.user.email;
-
-    await axios.post("/api/db/checkCrosswalk", {
-      userId, markerId
-    }).then(res => {
-      console.log(res.data);
-      setPopupUpvoted(res.upvoted);
-      setPopupDownvoted(res.downvoted);
-    })
+    if (session) {
+      const markerId = marker.id;
+      const userId = session.user.email;
+  
+      await axios.post("/api/db/checkCrosswalk", {
+        userId, markerId
+      }).then(response => {
+        console.log(response.data)
+        // setPopupUpvoted(response.data.upvoted)
+        // setPopupDownvoted(response.data.downvoted)
+        setPopupInfo({marker: marker, upvoted: response.data.upvoted})
+      }).catch(error => {
+        console.log(error.response.data)
+      })
+    } else {
+      setPopupInfo({marker: marker, upvoted: false})
+    }
   }
 
   const handleUpvote = async () => {
@@ -78,30 +85,44 @@ export default function MapComponent({ markers, session, locArray }) {
       return
     }
 
-    const markerId = popupInfo.id;
+    const markerId = popupInfo.marker.id;
     const userId = session.user.email;
 
-    await axios.post("/api/db/upvoteCrosswalk", {
-      userId, markerId
-    }).catch(error => {
-      console.log(error.response.data)
-    })
-    setVotes(votes + 1)
-  }
-
-  const handleDownvote = async () => {
-    if (!session) {
-      console.log('need auth')
-      setModalOpen(true)
-      return
+    // if not voted yet
+    if (!popupInfo.upvoted) {
+      await axios.post("/api/db/upvoteCrosswalk", {
+        userId, markerId
+      }).catch(error => {
+        console.log(error.response.data)
+      })
+      setVotes(votes + 1)
+      // setPopupInfo(popupInfo => {})
+    } else {
+      // already voted, need to unvote
+      await axios.post("/api/db/downvoteCrosswalk", {
+        userId, markerId
+      }).catch(error => {
+        console.log(error.response.data)
+      })
+      setVotes(votes - 1)
+      // setPopupInfo({marker: marker, upvoted: false})
     }
-
-    const markerId = popupInfo.id;
-    await axios.post("/api/db/downvoteCrosswalk", {
-      markerId
-    })
-    setVotes(votes - 1)
+    
   }
+
+  // const handleDownvote = async () => {
+  //   if (!session) {
+  //     console.log('need auth')
+  //     setModalOpen(true)
+  //     return
+  //   }
+
+  //   const markerId = popupInfo.id;
+  //   await axios.post("/api/db/downvoteCrosswalk", {
+  //     markerId
+  //   })
+  //   setVotes(votes - 1)
+  // }
 
   useEffect(() => {
     // for checking purposes
@@ -129,10 +150,10 @@ export default function MapComponent({ markers, session, locArray }) {
           onClick={e => {
             // prevent autoclose
             e.originalEvent.stopPropagation();
-            setPopupInfo(marker);
+            
+            // setPopupInfo(marker);
             setVotes(marker.votes);
             checkCrosswalk(marker);
-            console.log(popupUpvoted)
           }}
         />
       )),
@@ -199,23 +220,23 @@ export default function MapComponent({ markers, session, locArray }) {
             {popupInfo && (
               <Popup
                 anchor="top"
-                longitude={Number(popupInfo.longitude)}
-                latitude={Number(popupInfo.latitude)}
+                longitude={Number(popupInfo.marker.longitude)}
+                latitude={Number(popupInfo.marker.latitude)}
                 onClose={() => setPopupInfo(null)}
               >
                 <div>
-                  <p>{popupInfo.address}</p>
-                  <p>{popupInfo.description}</p>
+                  <p>{popupInfo.marker.address}</p>
+                  <p>{popupInfo.marker.description}</p>
                   <p>{votes}</p>
-                  {popupUpvoted ? 
+                  {popupInfo.upvoted ? 
                   <HandThumbUpIcon className="h-6 w-6 fill-blue-500 cursor-pointer" onClick={handleUpvote}/>
                   :
                   <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={handleUpvote}/>
                 }
                   
-                  <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/>
+                  {/* <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/> */}
                 </div>
-                <img width="100%" src={popupInfo.image} />
+                {/* <img width="100%" src={popupInfo.image} /> */}
               </Popup>
             )}
           </Map>
