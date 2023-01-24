@@ -198,6 +198,8 @@ export default function MapComponent({ markers, session, locArray }) {
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN}
             onClick={(evt) => handleClick(evt)}
             cursor={cursorType}
+            maxZoom={20}
+            minZoom={5}
           >
             {marker && 
               <div>
@@ -231,7 +233,7 @@ export default function MapComponent({ markers, session, locArray }) {
               >
                 <div className="m-1 flex flex-col gap-1">
                   <h1 className="text-lg font-medium font-sans">{popupInfo.marker.address}</h1>
-                  <p className="text-xs italic text-gray-700">Uploaded by: <span className="font-medium">{popupInfo.marker.userName}</span></p>
+                  <p className="text-xs italic text-gray-700">Suggested by: <span className="font-medium">{popupInfo.marker.userName}</span></p>
                   <p className="text-sm mt-2">{popupInfo.marker.description}</p>
                   
                   <div className="flex gap-2 mt-3">

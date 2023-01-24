@@ -1,10 +1,12 @@
 import { unstable_getServerSession } from "next-auth"
+import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { authOptions } from "./api/auth/[...nextauth]"
 import Layout from "../src/components/layout"
 import { prisma } from "../src/prisma";
 import { useMemo, Fragment, useState } from "react";
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { MapIcon } from "@heroicons/react/24/outline";
 import { Menu, Transition } from '@headlessui/react'
 import DeleteModal from "../src/components/deleteModal";
 import CrosswalkPanel from "../src/components/crosswalkPanel";
@@ -31,9 +33,16 @@ export default function MyCrosswalks({ crosswalkData }) {
     }
 
     return (
+      <>
+        <Head>
+          <title>My Crosswalks - crossywalk</title>
+          <meta name="description" content="Suggest your own crosswalk" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/crosswalk.svg" />
+        </Head>
         <Layout main={
             <div className="p-6 bg-slate-100 h-full">
-                <h1 className="text-lg">My Crosswalks</h1>
+                <h1 className="text-2xl">My Crosswalks</h1>
                 <ul role="list" className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 auto-rows-max">
 
                 {crosswalkData.map((crosswalk) => (
@@ -58,13 +67,27 @@ export default function MyCrosswalks({ crosswalkData }) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
                                   className={classNames(
-                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                    active ? 'bg-indigo-600 text-white' : 'text-gray-700',
+                                    'block w-full px-4 py-2 text-left text-sm flex'
+                                  )}
+                                  onClick={() => window.location.replace(`/${crosswalk.longitude},${crosswalk.latitude},18`)}
+                                >
+                                  <p className="my-auto">Show on map</p>
+                                  <MapIcon className="h-6 w-6 pl-2"/>
+                                </button>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                  className={classNames(
+                                    active ? 'bg-indigo-200 text-gray-900' : 'text-gray-700',
                                     'block w-full px-4 py-2 text-left text-sm'
                                   )}
                                   onClick={() => handleEdit(crosswalk)}
@@ -77,7 +100,7 @@ export default function MyCrosswalks({ crosswalkData }) {
                                 {({ active }) => (
                                   <button
                                     className={classNames(
-                                      active ? 'bg-red-100 text-gray-900' : 'text-gray-700',
+                                      active ? 'bg-red-500 text-white' : 'text-red-500',
                                       'block w-full px-4 py-2 text-left text-sm'
                                     )}
                                     onClick={() => handleDelete(crosswalk)}
@@ -107,6 +130,7 @@ export default function MyCrosswalks({ crosswalkData }) {
                 
             </div>
         }/>
+      </>
     )
 }
 

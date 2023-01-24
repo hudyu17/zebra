@@ -53,7 +53,7 @@ export default function AuthModal({ open, setOpen, viewState }) {
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
                     // onClick={() => setOpen(false)}
-                    onClick={() => signIn(undefined, {callbackUrl: `/${viewState.longitude},${viewState.latitude},${viewState.zoom}`})}
+                    onClick={() => signIn("google", {callbackUrl: `/${viewState.longitude},${viewState.latitude},${viewState.zoom}`})}
                   >
                     Login / Signup
                   </button>
