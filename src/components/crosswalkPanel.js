@@ -62,7 +62,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
         userId, lat, lng, address, description, shareInfo
       }).then(res => {
         // jump to new marker location
-        window.location.replace(`/${marker.lng},${marker.lat},15`)
+        window.location.replace(`/${marker.lng},${marker.lat},18`)
       }).catch(error => {
         console.log(error.response.data)
         alert('try again')

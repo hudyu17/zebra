@@ -1,6 +1,7 @@
 import Link from "next/link"
 import React, { useRef, useState, useEffect, useMemo } from "react"
 import Map, { Marker, Popup, ViewState } from "react-map-gl"
+import mapPopup from "./popup";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
@@ -12,10 +13,7 @@ export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
-  const [popupUpvoted, setPopupUpvoted] = useState(null);
-  const [popupDownvoted, setPopupDownvoted] = useState(null);
-
-  const [votes, setVotes] = useState(null);
+  
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [cursorType, setCursorType] = useState('pointer')
@@ -58,27 +56,25 @@ export default function MapComponent({ markers, session, locArray }) {
     setCursorType('pointer')
   }
 
-  const checkCrosswalk = async (marker) => {
+  const checkCrosswalk = async (crosswalk) => {
     if (session) {
-      const markerId = marker.id;
+      const markerId = crosswalk.id;
       const userId = session.user.email;
   
       await axios.post("/api/db/checkCrosswalk", {
         userId, markerId
       }).then(response => {
-        console.log(response.data)
-        // setPopupUpvoted(response.data.upvoted)
-        // setPopupDownvoted(response.data.downvoted)
-        setPopupInfo({marker: marker, upvoted: response.data.upvoted})
+        // console.log(response.data)
+        setPopupInfo({marker: response.data.marker, upvoted: response.data.upvoted})
       }).catch(error => {
         console.log(error.response.data)
       })
     } else {
-      setPopupInfo({marker: marker, upvoted: false})
+      setPopupInfo({marker: crosswalk, upvoted: false})
     }
   }
 
-  const handleUpvote = async () => {
+  const handleUpvote = async (crosswalk) => {
     if (!session) {
       console.log('need auth')
       setModalOpen(true)
@@ -88,41 +84,23 @@ export default function MapComponent({ markers, session, locArray }) {
     const markerId = popupInfo.marker.id;
     const userId = session.user.email;
 
-    // if not voted yet
+    // if not voted yet, add a vote
     if (!popupInfo.upvoted) {
       await axios.post("/api/db/upvoteCrosswalk", {
         userId, markerId
       }).catch(error => {
         console.log(error.response.data)
       })
-      setVotes(votes + 1)
-      // setPopupInfo(popupInfo => {})
     } else {
-      // already voted, need to unvote
+      // if already voted, remove a vote
       await axios.post("/api/db/downvoteCrosswalk", {
         userId, markerId
       }).catch(error => {
         console.log(error.response.data)
       })
-      setVotes(votes - 1)
-      // setPopupInfo({marker: marker, upvoted: false})
     }
-    
+    checkCrosswalk(crosswalk)
   }
-
-  // const handleDownvote = async () => {
-  //   if (!session) {
-  //     console.log('need auth')
-  //     setModalOpen(true)
-  //     return
-  //   }
-
-  //   const markerId = popupInfo.id;
-  //   await axios.post("/api/db/downvoteCrosswalk", {
-  //     markerId
-  //   })
-  //   setVotes(votes - 1)
-  // }
 
   useEffect(() => {
     // for checking purposes
@@ -146,16 +124,16 @@ export default function MapComponent({ markers, session, locArray }) {
           key={`marker-${marker.id}`}
           longitude={marker.longitude}
           latitude={marker.latitude}
-          anchor="center"
+          anchor="top"
           onClick={e => {
             // prevent autoclose
             e.originalEvent.stopPropagation();
             
-            // setPopupInfo(marker);
-            setVotes(marker.votes);
             checkCrosswalk(marker);
           }}
-        />
+        >
+          <img className="h-10 w-10" src="/crosswalk.svg"/>
+        </Marker>
       )),
     []
   );
@@ -200,26 +178,35 @@ export default function MapComponent({ markers, session, locArray }) {
             {...viewState}
             onMove={evt => setViewState(evt.viewState)}
             style={{width: '100%', height: '100vh'}}
-            mapStyle="mapbox://styles/mapbox/streets-v9"
+            mapStyle="mapbox://styles/hudsonyuen/cldahfklh000m01phstp7i9sb"
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_GL_ACCESS_TOKEN}
             onClick={(evt) => handleClick(evt)}
             cursor={cursorType}
           >
             {marker && 
               <div>
-                <Marker
-                  longitude={marker.lng}
-                  latitude={marker.lat}
-                  anchor="center"
-                />
+                <Marker longitude={marker.lng} latitude={marker.lat} anchor="center">
+                  <img className="h-10 w-10" src="/crosswalk.svg"/>
+                </Marker>
               </div>
             }
 
             {existingMarkers}
 
             {popupInfo && (
+              // <mapPopup 
+              //   lng={Number(popupInfo.marker.longitude)}
+              //   lat={Number(popupInfo.marker.latitude)}
+              //   setPopupInfo={setPopupInfo}
+              //   address={popupInfo.marker.address}
+              //   description={popupInfo.marker.description}
+              //   votes={popupInfo.marker.votes}
+              //   upvoted={popupInfo.upvoted}
+              //   handleUpvote={handleUpvote}
+              //   marker={popupInfo.marker}
+              // />
               <Popup
-                anchor="top"
+                anchor="bottom"
                 longitude={Number(popupInfo.marker.longitude)}
                 latitude={Number(popupInfo.marker.latitude)}
                 onClose={() => setPopupInfo(null)}
@@ -227,11 +214,11 @@ export default function MapComponent({ markers, session, locArray }) {
                 <div>
                   <p>{popupInfo.marker.address}</p>
                   <p>{popupInfo.marker.description}</p>
-                  <p>{votes}</p>
+                  <p>{popupInfo.marker.votes}</p>
                   {popupInfo.upvoted ? 
-                  <HandThumbUpIcon className="h-6 w-6 fill-blue-500 cursor-pointer" onClick={handleUpvote}/>
+                  <HandThumbUpIcon className="h-6 w-6 fill-blue-500 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
                   :
-                  <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={handleUpvote}/>
+                  <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
                 }
                   
                   {/* <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/> */}

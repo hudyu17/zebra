@@ -1,20 +1,17 @@
 import { prisma } from "../../../src/prisma";
+import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function downvoteCrosswalk(req, res) {
+    const session = await unstable_getServerSession(req, res, authOptions)
+    if (!session) {
+      res.status(401).send('No permissions')
+      return
+    }
+
     const { userId, markerId } = req.body;
-
+    
     try {
-        const updateVotes = await prisma.crosswalk.update({
-            where: {
-              id: markerId,
-            },
-            data: {
-              votes: {
-                decrement: 1
-              }
-            },
-          })
-
         // update uservote; user must exist if they've already upvoted
         const upvoted = await prisma.userVote.findUnique({
           where: {
@@ -24,10 +21,14 @@ export default async function downvoteCrosswalk(req, res) {
             upvoted: true
           }
         })
-        console.log(upvoted)
+        // console.log(upvoted)
         const index = upvoted.upvoted.indexOf(markerId);
         if (index > -1) { // only splice array when item is found
           upvoted.upvoted.splice(index, 1); // 2nd parameter means remove one item only
+        } else {
+          // crosswalk wasn't upvoted previously (maybe error)
+          res.status(400).send('Already downvoted')
+          return
         }
 
         const newUpvoted = upvoted.upvoted;
@@ -40,6 +41,18 @@ export default async function downvoteCrosswalk(req, res) {
               upvoted: newUpvoted
             }
           })
+
+        // actually decrement
+        const updateVotes = await prisma.crosswalk.update({
+          where: {
+            id: markerId,
+          },
+          data: {
+            votes: {
+              decrement: 1
+            }
+          },
+        })
         res.json(updateUserVote);
     } catch (error) {
         res.status(400).send(error.message);

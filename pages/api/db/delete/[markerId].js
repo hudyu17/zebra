@@ -1,6 +1,14 @@
 import { prisma } from "../../../../src/prisma";
+import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from "../../auth/[...nextauth]";
 
 export default async function deleteCrosswalk(req, res) {
+    const session = await unstable_getServerSession(req, res, authOptions)
+    if (!session) {
+      res.status(401).send('No permissions')
+      return
+    }
+    
     const { markerId } = req.query;
 
     try {
