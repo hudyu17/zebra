@@ -29,7 +29,6 @@ export default async function updateCrosswalk(req, res) {
             data: {
                 address: address,
                 description: description,
-                shareInfo: shareInfo,
                 updatedAt: isoDate
             }
           })

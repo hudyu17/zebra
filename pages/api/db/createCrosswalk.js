@@ -11,12 +11,12 @@ export default async function createCrosswalk(req, res) {
     
     const { 
         userId, 
+        userName,
         address,
         description,
         // image
         lat, 
         lng,
-        shareInfo, // nameImage, nameOnly, anon
     } = req.body;
     
     let currDate = new Date();
@@ -26,12 +26,12 @@ export default async function createCrosswalk(req, res) {
         const result = await prisma.crosswalk.create({
             data: {
                 userId: userId,
+                userName: userName,
                 latitude: lat,
                 longitude: lng,
                 address: address,
                 description: description,
                 votes: 0,
-                shareInfo: shareInfo,
                 createdAt: isoDate,
                 updatedAt: isoDate
             }

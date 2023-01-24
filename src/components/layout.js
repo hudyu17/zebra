@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react';
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 
 export default function Layout({ main }) {
     const {data: session} = useSession()
@@ -31,14 +32,15 @@ export default function Layout({ main }) {
                     
                     <nav className="mt-5 flex-1 space-y-1 bg-gray-800 px-2 shadow-xl" aria-label="Sidebar">
                         {authenticated ?
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col h-full justify-between'>
                             <Link className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                                 href='/myCrosswalks'
                             >
-                                my crosswalks
+                                My Crosswalks
                             </Link>
                             <div className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" onClick={() => signOut()}>
-                                logout
+                                <ArrowLeftOnRectangleIcon className='h-6 w-6 mr-2'/>
+                                <p>Logout</p>
                             </div>
                         </div>
                         :

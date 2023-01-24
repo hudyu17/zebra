@@ -7,10 +7,12 @@ import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
 import axios from "axios";
 import CrosswalkPanel from "./crosswalkPanel";
-import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
+import { HandThumbUpIcon, HandThumbDownIcon, HeartIcon } from "@heroicons/react/24/outline";
+import MaxModal from "./maxModal";
 
 export default function MapComponent({ markers, session, locArray }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [modalMaxOpen, setMaxModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
   
@@ -41,19 +43,33 @@ export default function MapComponent({ markers, session, locArray }) {
 
   
 
-  const handleAddClick = () => {
+  const handleAddClick = async () => {
     if (!session) {
       console.log('need auth')
       setModalOpen(true)
       return
     }
-    setAddActive(true)
-    setCursorType('crosshair')
+
+    // Check if user has hit upload limit
+    const userId = session.user.email;
+    await axios.post("/api/db/checkUser", {
+      userId
+    }).then(response => {
+      // console.log(response.data._count.id)
+      if (response.data._count.id >= 3) {
+        setMaxModalOpen(true)
+        return
+      } else {
+        setAddActive(true)
+        setCursorType('crosshair')
+      }
+    })
   }
 
   const handleCancel = () => {
     setAddActive(false)
     setCursorType('pointer')
+    setMarker(null)
   }
 
   const checkCrosswalk = async (crosswalk) => {
@@ -124,7 +140,7 @@ export default function MapComponent({ markers, session, locArray }) {
           key={`marker-${marker.id}`}
           longitude={marker.longitude}
           latitude={marker.latitude}
-          anchor="top"
+          anchor="center"
           onClick={e => {
             // prevent autoclose
             e.originalEvent.stopPropagation();
@@ -210,17 +226,23 @@ export default function MapComponent({ markers, session, locArray }) {
                 longitude={Number(popupInfo.marker.longitude)}
                 latitude={Number(popupInfo.marker.latitude)}
                 onClose={() => setPopupInfo(null)}
+                closeButton={false}
+                maxWidth="600px"
               >
-                <div>
-                  <p>{popupInfo.marker.address}</p>
-                  <p>{popupInfo.marker.description}</p>
-                  <p>{popupInfo.marker.votes}</p>
-                  {popupInfo.upvoted ? 
-                  <HandThumbUpIcon className="h-6 w-6 fill-blue-500 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
-                  :
-                  <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
-                }
+                <div className="m-1 flex flex-col gap-1">
+                  <h1 className="text-lg font-medium font-sans">{popupInfo.marker.address}</h1>
+                  <p className="text-xs italic text-gray-700">Uploaded by: <span className="font-medium">{popupInfo.marker.userName}</span></p>
+                  <p className="text-sm mt-2">{popupInfo.marker.description}</p>
                   
+                  <div className="flex gap-2 mt-3">
+                  {popupInfo.upvoted ? 
+                  <HeartIcon className="h-6 w-6 fill-red-500 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
+                  :
+                  <HeartIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpvote(popupInfo.marker)}/>
+                  
+                }
+                  <p className="text-sm text-gray-700 my-auto">{popupInfo.marker.votes}</p>
+                </div>
                   {/* <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/> */}
                 </div>
                 {/* <img width="100%" src={popupInfo.image} /> */}
@@ -229,8 +251,8 @@ export default function MapComponent({ markers, session, locArray }) {
           </Map>
         </div>
         <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session} edit={false}/>
-        
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
+        <MaxModal open={modalMaxOpen} setOpen={setMaxModalOpen}/>
     </div>
   )
 }

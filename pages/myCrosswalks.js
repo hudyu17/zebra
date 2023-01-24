@@ -37,7 +37,7 @@ export default function MyCrosswalks({ crosswalkData }) {
                 <ul role="list" className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 auto-rows-max">
 
                 {crosswalkData.map((crosswalk) => (
-                  <li key={crosswalk.id} className="col-span-1  rounded-lg bg-white shadow">
+                  <li key={crosswalk.id} className="col-span-1 rounded-lg bg-white shadow">
                   <div className="p-4 flex flex-col gap-4 h-full">
                     <div className="flex justify-between">
                       <h1>{crosswalk.address}</h1>

@@ -17,14 +17,12 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
       return {
         address: '',
         description: '',
-        shareInfo: ''
       }
     }
 
     return {
       address: marker.address,
       description: marker.description,
-      shareInfo: marker.shareInfo
     };
   });
 
@@ -45,11 +43,11 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
     }
 
     const userId = session.user.email;
+    const userName = session.user.name;
     const lat = marker.lat;
     const lng = marker.lng;
     const address = form.address;
     const description = form.description;
-    const shareInfo = form.shareInfo;
 
     let markerId;
     if (marker && edit) {
@@ -59,7 +57,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
     // add to db if new entry
     if (!edit) {
       await axios.post("/api/db/createCrosswalk", {
-        userId, lat, lng, address, description, shareInfo
+        userId, userName, lat, lng, address, description
       }).then(res => {
         // jump to new marker location
         window.location.replace(`/${marker.lng},${marker.lat},18`)
@@ -70,7 +68,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
     } else {
       // update in db if not new entry
       await axios.post("/api/db/updateCrosswalk", {
-        markerId, address, description, shareInfo
+        markerId, address, description
       }).then(res => {
         window.location.replace('/myCrosswalks')
       }).catch(error => {
@@ -209,37 +207,14 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
 
                             
 
-                            <div className="pt-8 space-y-6">
-                              <div>
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Other</h3>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  Some wrap-up details from us.
+                            <div className="pt-8">
+                              
+                                <h3 className="text-lg font-medium leading-6 text-gray-900 mb-6">Your suggestion will be live shortly after you submit.</h3>
+                                <p className="mt-1 text-sm text-gray-600 mb-2">
+                                  Your name <span className='font-medium text-gray-900'>({session.user.name})</span> will be displayed alongside your suggestion.
                                 </p>
-                              </div>
-                              <div>
-                                <div>
-                                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-                                    What information would you like to share pubicly alongside your suggested crosswalk? *
-                                  </label>
-                                  <select
-                                    id="shareInfo"
-                                    name="shareInfo"
-                                    className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    value={form.shareInfo}
-                                    onChange={handleChange}
-                                  >
-                                    <option value='nameImage'>Name ({session.user.name}) and Profile Image</option>
-                                    <option value='nameOnly'>Name only ({session.user.name})</option>
-                                    <option value='anon'>Anonymous</option>
-                                  </select>
-                                </div>
-                               
-                              </div>
-                              <div>
-                                <p className="block text-sm font-medium text-gray-700">Your suggestion will be live shortly after you submit.</p>
-                                <p className="block text-sm text-gray-500">In case of any issues, we'll contact you at: <span className='text-gray-700 font-medium'>{session.user.email}</span></p>
+                                <p className="block text-sm text-gray-600">In case of any issues, we'll contact you at: <span className='font-medium'>{session.user.email}</span></p>
                                 
-                              </div>
                             </div>
                           </div>
 
@@ -250,6 +225,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
                               <button
                                 type="button"
                                 className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                onClick={() => setOpen(false)}
                               >
                                 Cancel
                               </button>
