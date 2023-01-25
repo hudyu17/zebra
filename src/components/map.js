@@ -146,6 +146,7 @@ export default function MapComponent({ markers, session, locArray }) {
             e.originalEvent.stopPropagation();
             
             checkCrosswalk(marker);
+            setViewState({longitude: marker.longitude, latitude: marker.latitude, zoom: 19})
           }}
         >
           <img className="h-10 w-10" src="/crosswalk.svg"/>
@@ -156,13 +157,13 @@ export default function MapComponent({ markers, session, locArray }) {
 
   return (
     <div>
-      <div className="absolute z-10 flex gap-6 p-6">
+      <div className="absolute z-10 flex gap-3 lg:gap-6 px-3 pt-16 lg:pl-6 lg:pt-6 lg:flex-row flex-col w-full">
           <SearchBox setSelected={setSelected}/>
           
           {!addActive && 
             <button
               type="button"
-              className="inline-flex w-44 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex lg:w-44 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleAddClick}
             >
               <p className="text-align-center">Suggest your own crosswalk</p>
@@ -172,7 +173,7 @@ export default function MapComponent({ markers, session, locArray }) {
           {addActive &&
             <button
               type="button"
-              className="cursor-not-allowed inline-flex w-44 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="cursor-not-allowed inline-flex lg:w-44 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               disabled
             >
               <p className="text-align-center px-4">Select a location on the map</p>
@@ -182,13 +183,14 @@ export default function MapComponent({ markers, session, locArray }) {
           {addActive &&
             <button
               type="button"
-              className="inline-flex w-24 items-center justify-center rounded-md border border-transparent bg-red-400 px-4 hover:bg-red-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex lg:w-24 items-center justify-center rounded-md border border-transparent bg-red-400 px-4 hover:bg-red-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleCancel}
             >
               <p className="text-align-center px-4">Cancel</p>
             </button>
           }
         </div>
+        
         <div ref={mapContainer} className=''>
           <Map
             {...viewState}
@@ -229,7 +231,7 @@ export default function MapComponent({ markers, session, locArray }) {
                 latitude={Number(popupInfo.marker.latitude)}
                 onClose={() => setPopupInfo(null)}
                 closeButton={false}
-                maxWidth="600px"
+                maxWidth="350px"
               >
                 <div className="m-1 flex flex-col gap-1">
                   <h1 className="text-lg font-medium font-sans">{popupInfo.marker.address}</h1>

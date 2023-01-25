@@ -20,20 +20,19 @@ export default function About() {
                     crosswalks in the riskiest spots surrounding Queen's Park. 
                 </p>
                 <p>
-                    This was great, especially considering how crossing at these spots meant 
-                    taking perhaps the dumbest high-risk low-reward gamble a person 
-                    could ever take - a gamble I took many times 🤡</p>
+                    This was great, since crossing at these spots meant 
+                    taking perhaps the dumbest high-risk low-reward gamble ever 
+                    - a gamble I took many times 🤡</p>
                 <p>
-                    But that got me thinking - how did it take the better part of 5 years for these
-                    crosswalks to get installed?
+                    Everyone thought that these intersections were a death trap, but there was
+                    no way to really prove it, outside of <span className="italic">actual deaths.</span>
                 </p>
                 <p>
-                    Everyone I knew thought that these intersections were a death trap, so surely 
-                    the City understood as well.
+                    That's what crossywalk is: a place for everyone to suggest and upvote 
+                    crosswalks they think should exist.
                 </p>
-                <p>
-                    Maybe they did, or maybe they didn't. Either way, that's why crossywalk exists: so you
-                    can finally suggest and upvote crosswalks you think should exist. 
+                <p className="pt-6">
+                    Probably won't do much, but what's the harm in trying? 🤓
                 </p>
                 </div>
             </div>

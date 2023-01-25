@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react';
-import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import { useSession, signOut, signIn } from 'next-auth/react';
+import { ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, Bars3Icon, InformationCircleIcon, QueueListIcon } from '@heroicons/react/24/outline';
 
 export default function Layout({ main }) {
     const {data: session} = useSession()
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     // offline dev
     // const session = {
@@ -14,83 +16,130 @@ export default function Layout({ main }) {
     const authenticated = !! session
 
     return (
-        <div className='md:flex w-screen h-screen grid grid-rows-7'>
-            <div className="flex min-h-0 flex-1 flex-col bg-gray-800 md:w-1/6 grid-start-7">
-                <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+        <div className='flex flex-col lg:flex-row w-screen h-screen'>
+            <div className="flex bg-gray-800 lg:flex-col justify-between py-2 lg:py-0 z-10">
+                <div className="flex lg:flex-col lg:flex-1 overflow-y-auto lg:pt-5 lg:pb-4 w-full">
                     <Link 
-                        className="mx-5 flex gap-3" 
+                        className="mx-4 lg:mx-5 flex gap-3" 
                         href="/-79.4005188,43.6622882,11"
                     >              
-                        <img src="/crosswalk.svg" className='h-10 w-10 my-auto'/>
-                        <h1 className='text-yellow-500 lg:text-2xl font-fredoka-one my-auto'>crossywalk</h1>
+                        <img src="/crosswalk.svg" className='h-7 w-7 lg:h-9 lg:w-9 my-auto'/>
+                        <h1 className='text-yellow-500 lg:text-xl font-fredoka-one my-auto'>crossywalk</h1>
                     </Link>
                     
-                    <nav className="mt-5 flex-1 space-y-1 px-2" aria-label="Sidebar">
+                    <nav className="lg:mt-5 flex-1 space-y-1 px-2 lg:ml-0 " aria-label="Sidebar">
                         {authenticated ?
-                        <div className='flex flex-col h-full justify-between'>
+                        <div className='h-full flex flex-col'>
+                        {/* mobile view small */}
+                        <div className='sm:hidden my-auto self-end pr-2'>
+                            <Bars3Icon className='h-6 w-6 text-gray-300 hover:text-white cursor-pointer' onClick={() => setMobileMenuOpen(!mobileMenuOpen)}/>
+                            {mobileMenuOpen &&
+                                <div className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <div className="py-1">
+                                  <div>
+                                    
+                                      <a
+                                        href="#"
+                                        className="text-gray-700 block px-4 py-2 text-sm"
+                                      >
+                                        Account settings
+                                      </a>
+                                    
+                                  </div>
+                                  <div>
+                                    
+                                      <a
+                                        href="#"
+                                        className="text-gray-700 block px-4 py-2 text-sm"
+
+                                      >
+                                        Support
+                                      </a>
+                                    
+                                  </div>
+                                  <div>
+ 
+                                      <a
+                                        href="#"
+                                        className="text-gray-700 block px-4 py-2 text-sm"
+
+
+                                      >
+                                        License
+                                      </a>
+
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                        </div>
+                        {/* desktop view large */}
+                        <div className='hidden md:flex flex lg:flex-col h-full justify-between'>
                             <Link className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                                 href='/myCrosswalks'
                             >
-                                My Crosswalks
+                                <QueueListIcon className='hidden lg:block h-6 w-6 mr-2'/>
+                                <p>My Crosswalks</p>
                             </Link>
                             
-                            <div className='flex flex-col gap-2'>
-                            <Link className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                                href='/about'
-                            >
-                                <InformationCircleIcon className='h-6 w-6 mr-2'/>
-                                <p>About</p>
-                            </Link>
-                            <div className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" 
-                                onClick={() => signOut()}>
-                                <ArrowLeftOnRectangleIcon className='h-6 w-6 mr-2'/>
-                                <p>Logout</p>
+                            <div className='flex flex-row lg:flex-col gap-2'>
+                                <Link className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                                    href='/about'
+                                >
+                                    <InformationCircleIcon className='hidden lg:block h-6 w-6 mr-2'/>
+                                    <p>About</p>
+                                </Link>
+                                <div className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" 
+                                    onClick={() => signOut()}>
+                                    <ArrowLeftOnRectangleIcon className='hidden lg:block h-6 w-6 mr-2'/>
+                                    <p>Logout</p>
+                                </div>
                             </div>
                             </div>
-
                         </div>
                         :
-                        <div className='flex flex-col gap-2'>
+                        <div className='flex lg:flex-col gap-2 justify-between'>
                             <Link 
-                            className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                                href="/login"
+                                className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                                href='/about'
+                            >
+                                <InformationCircleIcon className='hidden lg:block h-6 w-6 mr-2'/>
+                                <p>About</p>
+                            </Link>
+                            <button 
+                                className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center pr-6 lg:px-2 py-2 text-sm font-medium rounded-md"
+                                onClick={() => signIn("google", {callbackUrl: '/'})}
                             >
                                 <div className='flex'>
-                                <ArrowRightOnRectangleIcon className='h-6 w-6 mr-2'/>
+                                <ArrowRightOnRectangleIcon className='hidden lg:block h-6 w-6 mr-2'/>
                                 <p className='my-auto'>Login or Signup</p>
                                 </div>
                                 
-                            </Link>
-                            <Link className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                            href='/about'
-                        >
-                            <InformationCircleIcon className='h-6 w-6 mr-2'/>
-                            <p>About</p>
-                        </Link>
+                            </button>
                         </div>
                         }
                     </nav>
                 </div>
 
                 {authenticated &&
-                <div className="flex flex-shrink-0 bg-gray-700 p-4">
+                <div className="flex flex-shrink-0 lg:bg-gray-700 md:px-3 lg:p-4">
                     <div className="flex items-center">
                         <div>
                         <img
-                            className="inline-block h-9 w-9 rounded-full"
+                            className="inline-block h-8 w-8 lg:h-9 lg:w-9 rounded-full"
                             src={session.user.image}
                             alt=""
                         />
                         </div>
                         <div className="ml-3">
-                        <p className="text-sm font-medium text-white">{session.user.name}</p>
+                        <p className="hidden lg:flex text-sm font-medium text-white">{session.user.name}</p>
                         </div>
                     </div>
                 </div>
                 }
             </div>
 
-            <main className='md:w-5/6'>
+            <main className='lg:relative fixed w-screen h-screen lg:flex-1'>
                 {main}
             </main>
         
