@@ -41,7 +41,7 @@ export default function MyCrosswalks({ crosswalkData }) {
           <link rel="icon" href="/crosswalk.svg" />
         </Head>
         <Layout main={
-            <div className="p-6 bg-slate-100 h-full">
+            <div className="pt-20 lg:pt-6 px-6 bg-slate-100 h-full">
                 <h1 className="text-2xl">My Crosswalks</h1>
                 <ul role="list" className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 auto-rows-max">
 
@@ -87,7 +87,7 @@ export default function MyCrosswalks({ crosswalkData }) {
                                 {({ active }) => (
                                   <button
                                   className={classNames(
-                                    active ? 'bg-indigo-200 text-gray-900' : 'text-gray-700',
+                                    active ? 'bg-indigo-100 text-gray-900' : 'text-gray-700',
                                     'block w-full px-4 py-2 text-left text-sm'
                                   )}
                                   onClick={() => handleEdit(crosswalk)}

@@ -96,7 +96,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex w-1/2 max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex md:w-1/2 max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -169,7 +169,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
                                   {/* <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p> */}
                                 </div>
 
-                                <div className="sm:col-span-6">
+                                {/* <div className="sm:col-span-6">
                                   <label htmlFor="cover-photo" className="block text-sm font-medium text-gray-700">
                                     Show us the crosswalk location
                                   </label>
@@ -202,7 +202,7 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
                                       <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                     </div>
                                   </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             
@@ -234,8 +234,8 @@ export default function CrosswalkPanel({ open, setOpen, marker, session, edit })
                                 className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 onClick={handleSubmit}
                               >
-                                {edit ? <p>Submit Changes</p> : <p>Submit</p>}
-                                {/* Submit */}
+                                {/* {edit ? <p>Submit Changes</p> : <p>Submit</p>} */}
+                                Submit
                               </button>
                             </div>
                             </div>

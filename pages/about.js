@@ -12,7 +12,7 @@ export default function About() {
             </Head>
         <Layout 
         main={        
-            <div className="p-6 bg-slate-100 h-full">
+            <div className="pt-20 lg:pt-6 px-6 bg-slate-100 h-full">
                 <h1 className="text-2xl">So what's this all about?</h1>
                 <div className="pt-6 flex max-w-prose flex-col gap-4">
                 <p>

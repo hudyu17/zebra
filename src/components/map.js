@@ -56,7 +56,7 @@ export default function MapComponent({ markers, session, locArray }) {
       userId
     }).then(response => {
       // console.log(response.data._count.id)
-      if (response.data._count.id >= 3) {
+      if (response.data._count.id >= 5) {
         setMaxModalOpen(true)
         return
       } else {
