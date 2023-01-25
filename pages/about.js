@@ -13,7 +13,7 @@ export default function About() {
         <Layout 
         main={        
             <div className="pt-20 lg:pt-6 px-6 bg-slate-100 h-full">
-                <h1 className="text-2xl">So what's this all about?</h1>
+                <h1 className="text-2xl">So what&apos;s this all about?</h1>
                 <div className="pt-6 flex max-w-prose flex-col gap-4">
                 <p>
                     During my 5+ years of undergrad in Toronto, I saw the City install 2 new 
@@ -28,11 +28,11 @@ export default function About() {
                     no way to really prove it, outside of <span className="italic">actual deaths.</span>
                 </p>
                 <p>
-                    That's what crossywalk is: a place for everyone to suggest and upvote 
+                    That&apos;s what crossywalk is&colon; a place for everyone to suggest and upvote 
                     crosswalks they think should exist.
                 </p>
                 <p className="pt-6">
-                    Probably won't do much, but what's the harm in trying? 🤓
+                    Probably won't do much, but what&apos;s the harm in trying? 🤓
                 </p>
                 </div>
             </div>
