@@ -28,7 +28,7 @@ export default function About() {
                     no way to really prove it, outside of <span className="italic">actual deaths.</span>
                 </p>
                 <p>
-                    That&apos;s what crossywalk is&colon; a place for everyone to suggest and upvote 
+                    That&apos;s what crossywalk is: a place for everyone to suggest and upvote 
                     crosswalks they think should exist.
                 </p>
                 <p className="pt-6">
