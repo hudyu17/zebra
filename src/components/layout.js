@@ -149,7 +149,7 @@ export default function Layout({ main }) {
                                     <p>About</p>
                                 </Link>
                                 <div className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" 
-                                    onClick={() => signOut()}>
+                                    onClick={() => signOut({callbackUrl: '/'})}>
                                     <ArrowLeftOnRectangleIcon className='hidden lg:block h-6 w-6 mr-2'/>
                                     <p>Logout</p>
                                 </div>
