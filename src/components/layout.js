@@ -22,7 +22,7 @@ export default function Layout({ main }) {
 
     return (
         <div className='flex flex-col lg:flex-row w-screen h-screen'>
-            <div className="flex bg-gray-800 lg:flex-col justify-between py-2 lg:py-0 z-10">
+            <div className="flex fixed w-full lg:relative lg:w-max bg-gray-800 lg:flex-col justify-between py-2 lg:py-0 z-10">
                 <div className="flex lg:flex-col lg:flex-1  lg:pt-5 lg:pb-4 w-full">
                     <Link 
                         className="mx-4 lg:mx-5 flex gap-3" 
@@ -37,41 +37,12 @@ export default function Layout({ main }) {
                         <div className='h-full flex flex-col'>
                         {/* mobile view small */}
                         <div className='md:hidden flex my-auto self-end pr-2'>
-                            {/* <Bars3Icon className='h-6 w-6 text-gray-300 hover:text-white cursor-pointer' onClick={() => setMobileMenuOpen(!mobileMenuOpen)}/> */}
-                        
-                                {/* <div className="absolute right-0 z-20 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="py-1">
-                                  <div>
-                                      <Link
-                                        href="/myCrosswalks"
-                                        className="text-gray-700 block px-4 py-2 text-sm"
-                                      >
-                                        My Crosswalks
-                                      </Link>
-                                  </div>
-                                  <div>
-                                      <Link
-                                        href="/about"
-                                        className="text-gray-700 block px-4 py-2 text-sm"
-                                      >
-                                        About
-                                      </Link>
-                                  </div>
-                                  <div>
-                                      <div
-                                        className="text-gray-700 block px-4 py-2 text-sm"
-                                        onClick={() => signOut()}
-                                      >
-                                        Logout
-                                      </div>
-                                  </div>
-                                </div>
-                              </div> */}
+                            
                             <Menu as="div" className="relative inline-block text-left">
                         <div>
                           <Menu.Button className="flex h-6 w-6 text-gray-300 hover:text-white cursor-pointer">
                             <span className="sr-only">Open options</span>
-                            <Bars3Icon aria-hidden="true" />
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                           </Menu.Button>
                         </div>
 

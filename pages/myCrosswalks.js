@@ -115,7 +115,12 @@ export default function MyCrosswalks({ crosswalkData }) {
                       </Menu>
                     </div>
                     <p className="text-sm">{crosswalk.description}</p>
-                    <p className="mt-auto">{crosswalk.votes} likes</p>
+                    {crosswalk.votes !== 1?
+                      <p className="mt-auto">{crosswalk.votes} likes</p>
+                      :
+                      <p className="mt-auto">{crosswalk.votes} like</p>
+                    }
+                    
                   </div>
                   
                   </li>
