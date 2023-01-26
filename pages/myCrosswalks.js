@@ -115,7 +115,12 @@ export default function MyCrosswalks({ crosswalkData }) {
                       </Menu>
                     </div>
                     <p className="text-sm">{crosswalk.description}</p>
-                    <p className="mt-auto">{crosswalk.votes} likes</p>
+                    {crosswalk.votes !== 1?
+                      <p className="mt-auto">{crosswalk.votes} likes</p>
+                      :
+                      <p className="mt-auto">{crosswalk.votes} like</p>
+                    }
+                    
                   </div>
                   
                   </li>
@@ -141,7 +146,7 @@ export async function getServerSideProps(context) {
     if (!session) {
       return {
         redirect: {
-          destination: '/login',
+          destination: '/404',
           permanent: false,
         },
       }
