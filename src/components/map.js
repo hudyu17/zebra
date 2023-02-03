@@ -1,4 +1,5 @@
 import Link from "next/link"
+import styles from '../../styles/popup.module.css'
 import React, { useRef, useState, useEffect, useMemo } from "react"
 import Map, { Marker, Popup, ViewState } from "react-map-gl"
 import mapPopup from "./popup";
@@ -7,14 +8,17 @@ import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
 import axios from "axios";
 import CrosswalkPanel from "./crosswalkPanel";
-import { HandThumbUpIcon, HandThumbDownIcon, HeartIcon } from "@heroicons/react/24/outline";
+import { HandThumbUpIcon, HandThumbDownIcon, HeartIcon, LinkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import MaxModal from "./maxModal";
+import Copied from "./copied";
 
-export default function MapComponent({ markers, session, locArray }) {
+export default function MapComponent({ markers, session, locArray, setLoaded }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMaxOpen, setMaxModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
+  const [showCopied, setShowCopied] = useState(false);
   
   const [selected, setSelected] = useState(null);
   const [addActive, setAddActive] = useState(false);
@@ -29,6 +33,8 @@ export default function MapComponent({ markers, session, locArray }) {
   const [marker, setMarker] = useState(null) // could memo later if necessary
 
   const mapContainer = useRef(null);
+  const mapRef = useRef();
+
 
   const handleClick = (evt) => {
     // console.log(evt.lngLat)
@@ -117,6 +123,11 @@ export default function MapComponent({ markers, session, locArray }) {
     }
     checkCrosswalk(crosswalk)
   }
+  
+  const copyLink = (info) => {
+    navigator.clipboard.writeText(`https://crossywalk.com/${info.longitude},${info.latitude},19`);
+    setShowCopied(true)
+  }
 
   useEffect(() => {
     // for checking purposes
@@ -133,6 +144,13 @@ export default function MapComponent({ markers, session, locArray }) {
     }
   })
 
+  useEffect(() => {
+    setTimeout(()=>{
+      setShowCopied(false)
+     }, 5000)
+  }
+  , [showCopied])
+
   const existingMarkers = useMemo(
     () =>
       markers.map((marker) => (
@@ -146,7 +164,12 @@ export default function MapComponent({ markers, session, locArray }) {
             e.originalEvent.stopPropagation();
             
             checkCrosswalk(marker);
-            setViewState({longitude: marker.longitude, latitude: marker.latitude, zoom: 19})
+            // setViewState({longitude: marker.longitude, latitude: marker.latitude, zoom: 19})
+            mapRef.current?.flyTo({
+              center: [marker.longitude, marker.latitude],
+              zoom: 19,
+              speed: 1.8,
+            })
           }}
         >
           <img className="h-10 w-10" src="/crosswalk.svg"/>
@@ -163,17 +186,20 @@ export default function MapComponent({ markers, session, locArray }) {
           {!addActive && 
             <button
               type="button"
-              className="inline-flex lg:w-44 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex lg:w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleAddClick}
             >
-              <p className="text-align-center">Suggest your own crosswalk</p>
+              <PlusIcon className="-ml-1 mr-1 h-5 w-5" aria-hidden="true" />
+              <p>
+                Suggest crosswalk
+              </p>
             </button>
           } 
 
           {addActive &&
             <button
               type="button"
-              className="cursor-not-allowed inline-flex lg:w-44 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="cursor-not-allowed inline-flex lg:w-48 items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               disabled
             >
               <p className="text-align-center px-4">Select a location on the map</p>
@@ -194,6 +220,7 @@ export default function MapComponent({ markers, session, locArray }) {
         <div ref={mapContainer} className=''>
           <Map
             {...viewState}
+            ref={mapRef}
             onMove={evt => setViewState(evt.viewState)}
             style={{width: '100%', height: '100vh'}}
             mapStyle="mapbox://styles/hudsonyuen/cldahfklh000m01phstp7i9sb"
@@ -202,6 +229,7 @@ export default function MapComponent({ markers, session, locArray }) {
             cursor={cursorType}
             maxZoom={20}
             minZoom={5}
+            onLoad={() => setLoaded(true)}
           >
             {marker && 
               <div>
@@ -234,7 +262,13 @@ export default function MapComponent({ markers, session, locArray }) {
                 maxWidth="350px"
               >
                 <div className="m-1 flex flex-col gap-1">
-                  <h1 className="text-lg font-medium font-sans">{popupInfo.marker.address}</h1>
+                  <div className="flex justify-between">
+                    <h1 className="text-lg font-medium font-sans">{popupInfo.marker.address}</h1>
+                    <LinkIcon 
+                      className="h-5 w-5 cursor-pointer my-auto text-gray-600 hover:text-indigo-900"
+                      onClick={() => copyLink(popupInfo.marker)}
+                    />
+                  </div>
                   <p className="text-xs italic text-gray-700">Suggested by: <span className="font-medium">{popupInfo.marker.userName}</span></p>
                   <p className="text-sm mt-2">{popupInfo.marker.description}</p>
                   
@@ -257,6 +291,7 @@ export default function MapComponent({ markers, session, locArray }) {
         <CrosswalkPanel open={panelOpen} setOpen={setPanelOpen} marker={marker} session={session} edit={false}/>
         <AuthModal open={modalOpen} setOpen={setModalOpen} viewState={viewState}/>
         <MaxModal open={modalMaxOpen} setOpen={setMaxModalOpen}/>
+        <Copied show={showCopied} setShow={setShowCopied}/>
     </div>
   )
 }

@@ -1,0 +1,4 @@
+.mapboxgl-popup-content {
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+}
