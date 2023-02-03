@@ -43,7 +43,7 @@ export const PlacesAutocomplete = ({ setSelected }) => {
         clearSuggestions,
     } = usePlacesAutocomplete({
         requestOptions: {
-            componentRestrictions: { country: ["US", "CA"], },
+            componentRestrictions: { country: ["US", "CA", "GB", "HK"], },
           },
           debounce: 300,
     });
@@ -64,9 +64,9 @@ export const PlacesAutocomplete = ({ setSelected }) => {
             onChange={(e) => setValue(e.target.value)}
             disabled={!ready}
             className="w-full lg:w-96 shadow-sm p-4 rounded-md text-gray-900"
-            placeholder="Jump to a location..."
+            placeholder="Search a location..."
           />
-          <ComboboxPopover className="mt-4 rounded-md">
+          <ComboboxPopover className="mt-4 rounded-md z-10">
             <ComboboxList>
               {status === "OK" &&
                 data.map(({ place_id, description }) => (
