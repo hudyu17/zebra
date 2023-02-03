@@ -1,10 +1,11 @@
 import { unstable_getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { prisma } from "../../src/prisma"
+import { useState } from "react"
 
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from '@next/font/google'
+import { ArrowPathIcon } from "@heroicons/react/24/outline"
 import Layout from "../../src/components/layout"
 import Places from "../../src/components/crosswalkForm"
 import { authOptions } from "../api/auth/[...nextauth]"
@@ -13,6 +14,8 @@ import { useRouter } from 'next/router'
 export default function Home({ markers, locArray }) {
     const { data: session, status } = useSession()
     
+    const [loaded, setLoaded] = useState(false);
+    
     // offline dev
     // const session = {
     //   expires: "1",
@@ -20,7 +23,7 @@ export default function Home({ markers, locArray }) {
     // }
 
     // const locArray = loc.split(",")
-  
+
     return (
     <>
       <Head>
@@ -30,12 +33,20 @@ export default function Home({ markers, locArray }) {
         <meta property="og:description" content="Suggest your own crosswalk"/>
         <meta property="og:image" content="/preview.png" />
       </Head>
+      
+      {!loaded && <div className="flex h-screen">
+        <div className="m-auto">
+        <ArrowPathIcon className="h-10 w-10 mx-auto animate-spin text-gray-500"/>
+        </div>
+      </div>}
+
       <Layout 
       main={        
         <div>
-          <Places markers={markers} session={session} locArray={locArray}/>
+          <Places markers={markers} session={session} locArray={locArray} setLoaded={setLoaded}/>
         </div>
       }/>
+      
     </>
   )
 }
