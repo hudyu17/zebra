@@ -11,7 +11,7 @@ export default function Copied({ show, setShow }) {
       {/* Global notification live region, render this permanently at the end of the document */}
       <div
         aria-live="assertive"
-        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 lg:items-start lg:p-6"
+        className="pointer-events-none z-30 fixed inset-0 flex items-end px-4 py-6 lg:items-start lg:p-6"
       >
         <div className="flex w-full flex-col items-center space-y-4 lg:items-end">
           {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}

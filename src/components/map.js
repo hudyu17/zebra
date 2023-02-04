@@ -8,7 +8,7 @@ import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
 import axios from "axios";
 import CrosswalkPanel from "./crosswalkPanel";
-import { HandThumbUpIcon, HandThumbDownIcon, HeartIcon, LinkIcon } from "@heroicons/react/24/outline";
+import { HeartIcon, LinkIcon, PaperAirplaneIcon, ArrowSmallRightIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import MaxModal from "./maxModal";
 import Copied from "./copied";
@@ -32,6 +32,13 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
   });
   const [marker, setMarker] = useState(null) // could memo later if necessary
 
+  const locations = [
+    {name: 'Toronto', long: -79.4005188, lat: 43.6622882},
+    {name: 'NYC', long: -73.960412, lat: 40.750808},
+    {name: 'London', long: -0.075278, lat: 51.505554},
+    {name: 'HK', long: 114.163589, lat: 22.273643},
+  ]
+
   const mapContainer = useRef(null);
   const mapRef = useRef();
 
@@ -47,7 +54,6 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
     }
   }
 
-  
 
   const handleAddClick = async () => {
     if (!session) {
@@ -129,11 +135,26 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
     setShowCopied(true)
   }
 
+  const jumpLocation = (location) => {
+    mapRef.current?.flyTo({
+      center: [location.long, location.lat],
+      zoom: 12,
+      speed: 4,
+    })
+    setPopupInfo(null)
+  }
+
   useEffect(() => {
     // for checking purposes
     console.log(selected)
     if (selected !== null) {
-        setViewState({longitude: selected.lng, latitude: selected.lat, zoom: 18})
+        // setViewState({longitude: selected.lng, latitude: selected.lat, zoom: 18})
+        setPopupInfo(null)
+        mapRef.current?.flyTo({
+          center: [selected.lng, selected.lat],
+          zoom: 18,
+          speed: 1.8,
+        })
         console.log(selected)
     }
   }, [selected])
@@ -180,13 +201,13 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
 
   return (
     <div>
-      <div className="absolute z-10 flex gap-3 lg:gap-6 px-3 pt-16 lg:pl-6 lg:pt-6 lg:flex-row flex-col w-full">
+      <div className="absolute z-10 flex gap-3 lg:gap-6 px-3 pt-16 lg:px-6 lg:pt-6 lg:flex-row flex-col w-full">
           <SearchBox setSelected={setSelected}/>
           
           {!addActive && 
             <button
               type="button"
-              className="inline-flex lg:w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex lg:h-14 lg:w-48 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={handleAddClick}
             >
               <PlusIcon className="-ml-1 mr-1 h-5 w-5" aria-hidden="true" />
@@ -215,6 +236,18 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
               <p className="text-align-center px-4">Cancel</p>
             </button>
           }
+
+          <div className="order-first lg:order-last lg:ml-auto flex lg:flex-col gap-3 justify-between lg:w-auto lg:mb-0">
+            {locations.map((location) => (
+              <button
+                className="inline-flex text-xs lg:text-sm lg:w-30 grow items-center justify-center rounded-md border border-transparent bg-zinc-400 px-4 hover:bg-zinc-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
+                onClick={() => jumpLocation(location)}
+              >
+                {location.name}
+                <ArrowSmallRightIcon className="hidden sm:block ml-1 my-auto h-4 w-4" aria-hidden="true" />
+              </button>
+            ))}
+          </div>
         </div>
         
         <div ref={mapContainer} className=''>
@@ -228,7 +261,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
             onClick={(evt) => handleClick(evt)}
             cursor={cursorType}
             maxZoom={20}
-            minZoom={5}
+            minZoom={3}
             onLoad={() => setLoaded(true)}
           >
             {marker && 
@@ -242,17 +275,6 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
             {existingMarkers}
 
             {popupInfo && (
-              // <mapPopup 
-              //   lng={Number(popupInfo.marker.longitude)}
-              //   lat={Number(popupInfo.marker.latitude)}
-              //   setPopupInfo={setPopupInfo}
-              //   address={popupInfo.marker.address}
-              //   description={popupInfo.marker.description}
-              //   votes={popupInfo.marker.votes}
-              //   upvoted={popupInfo.upvoted}
-              //   handleUpvote={handleUpvote}
-              //   marker={popupInfo.marker}
-              // />
               <Popup
                 anchor="bottom"
                 longitude={Number(popupInfo.marker.longitude)}
@@ -281,9 +303,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
                 }
                   <p className="text-sm text-gray-700 my-auto">{popupInfo.marker.votes}</p>
                 </div>
-                  {/* <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/> */}
                 </div>
-                {/* <img width="100%" src={popupInfo.image} /> */}
               </Popup>
             )}
           </Map>
