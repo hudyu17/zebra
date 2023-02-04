@@ -236,22 +236,17 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
               <p className="text-align-center px-4">Cancel</p>
             </button>
           }
-          <div className="lg:ml-auto flex flex-col gap-3">
-            {/* <div className="inline-flex justify-center">
-              <p className="">Jump</p>
-              <PaperAirplaneIcon className="ml-1 my-auto h-5 w-5" aria-hidden="true" />
-            </div> */}
-            <div className="flex flex-col gap-3">
-              {locations.map((location) => (
-                <button
-                  className="inline-flex lg:w-30 items-center justify-center rounded-md border border-transparent bg-zinc-400 px-4 hover:bg-zinc-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  onClick={() => jumpLocation(location)}
-                >
-                  {location.name}
-                  <ArrowSmallRightIcon className="ml-1 my-auto h-4 w-4" aria-hidden="true" />
-                </button>
-              ))}
-            </div>
+
+          <div className="order-first lg:order-last lg:ml-auto flex lg:flex-col gap-3 justify-between lg:w-auto lg:mb-0">
+            {locations.map((location) => (
+              <button
+                className="inline-flex text-xs lg:text-sm lg:w-30 grow items-center justify-center rounded-md border border-transparent bg-zinc-400 px-4 hover:bg-zinc-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
+                onClick={() => jumpLocation(location)}
+              >
+                {location.name}
+                <ArrowSmallRightIcon className="hidden sm:block ml-1 my-auto h-4 w-4" aria-hidden="true" />
+              </button>
+            ))}
           </div>
         </div>
         

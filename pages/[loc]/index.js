@@ -27,7 +27,7 @@ export default function Home({ markers, locArray }) {
     return (
     <>
       <Head>
-        <title>crossywalk</title>
+        <title>crossywalk - Suggest your own crosswalk</title>
         <meta name="description" content="Suggest your own crosswalk" />
         <meta property="og:title" content="Crossywalk"/>
         <meta property="og:description" content="Suggest your own crosswalk"/>

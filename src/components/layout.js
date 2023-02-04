@@ -142,7 +142,8 @@ export default function Layout({ main }) {
                             >
                                 {/* <div className='flex'> */}
                                 <ArrowRightOnRectangleIcon className='hidden lg:block h-6 w-6 mr-2'/>
-                                <p className=''>Login or Signup</p>
+                                <p className=''>Login</p>
+                                <ArrowRightOnRectangleIcon className='lg:hidden h-6 w-6 ml-2 -mr-2'/>
                                 {/* </div> */}
                                 
                             </button>
