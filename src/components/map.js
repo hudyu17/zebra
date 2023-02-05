@@ -201,7 +201,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
 
   return (
     <div>
-      <div className="absolute z-10 flex gap-3 lg:gap-6 px-3 pt-16 lg:px-6 lg:pt-6 lg:flex-row flex-col w-full">
+      <div className="absolute z-10 flex gap-3 lg:gap-6 px-3 pt-16 lg:px-6 lg:pt-6 lg:flex-row flex-col w-full lg:w-auto">
           <SearchBox setSelected={setSelected}/>
           
           {!addActive && 
@@ -237,7 +237,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
             </button>
           }
 
-          <div className="order-first lg:order-last lg:ml-auto flex lg:flex-col gap-3 justify-between lg:w-auto lg:mb-0">
+          <div className="order-first lg:hidden flex gap-3 justify-between">
             {locations.map((location) => (
               <button
                 className="inline-flex text-xs lg:text-sm lg:w-30 grow items-center justify-center rounded-md border border-transparent bg-zinc-400 px-4 hover:bg-zinc-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
@@ -249,6 +249,19 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
             ))}
           </div>
         </div>
+
+        {/* jump buttons in large view */}
+        <div className="absolute z-10 lg:ml-auto flex lg:flex-col gap-3 justify-between lg:w-30 lg:top-6 lg:right-6 lg:mb-0">
+            {locations.map((location) => (
+              <button
+                className="inline-flex text-xs lg:text-sm lg:w-30 grow items-center justify-center rounded-md border border-transparent bg-zinc-400 px-4 hover:bg-zinc-500 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
+                onClick={() => jumpLocation(location)}
+              >
+                {location.name}
+                <ArrowSmallRightIcon className="hidden sm:block ml-1 my-auto h-4 w-4" aria-hidden="true" />
+              </button>
+            ))}
+          </div>
         
         <div ref={mapContainer} className=''>
           <Map
