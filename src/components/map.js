@@ -12,6 +12,7 @@ import { HeartIcon, LinkIcon, PaperAirplaneIcon, ArrowSmallRightIcon } from "@he
 import { PlusIcon } from "@heroicons/react/20/solid";
 import MaxModal from "./maxModal";
 import Copied from "./copied";
+import { useRouter } from "next/router";
 
 export default function MapComponent({ markers, session, locArray, setLoaded }) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -41,7 +42,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
 
   const mapContainer = useRef(null);
   const mapRef = useRef();
-
+  const router = useRouter();
 
   const handleClick = (evt) => {
     // console.log(evt.lngLat)
@@ -142,6 +143,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
       speed: 4,
     })
     setPopupInfo(null)
+    router.push(`/${location.long},${location.lat},12`, undefined, { shallow: true })
   }
 
   useEffect(() => {
