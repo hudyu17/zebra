@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import {
     Combobox,
     ComboboxInput,
@@ -14,9 +12,6 @@ import {
   } from "@reach/combobox";
   import "@reach/combobox/styles.css";
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
 
 const libraries = ['places']
 export default function SearchBox({ setSelected }) {

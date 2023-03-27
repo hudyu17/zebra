@@ -1,8 +1,5 @@
-import Link from "next/link"
-import styles from '../../styles/popup.module.css'
 import React, { useRef, useState, useEffect, useMemo } from "react"
 import Map, { Marker, Popup, ViewState } from "react-map-gl"
-import mapPopup from "./popup";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBox from "./searchBox";
 import AuthModal from "./authModal";
@@ -45,11 +42,10 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
   const router = useRouter();
 
   const handleClick = (evt) => {
-    // console.log(evt.lngLat)
     if (cursorType === 'crosshair') {
       setCursorType('pointer')
 
-      // temp marker, not added to db
+      // Set state with temp marker, not added to db
       setMarker({lat: evt.lngLat.lat, lng: evt.lngLat.lng})
       setPanelOpen(true)
     }
@@ -58,17 +54,15 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
 
   const handleAddClick = async () => {
     if (!session) {
-      console.log('need auth')
       setModalOpen(true)
       return
     }
 
-    // Check if user has hit upload limit
+    // Check if user has hit upload limit, currently 5
     const userId = session.user.email;
     await axios.post("/api/db/checkUser", {
       userId
     }).then(response => {
-      // console.log(response.data._count.id)
       if (response.data._count.id >= 5) {
         setMaxModalOpen(true)
         return
@@ -93,7 +87,6 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
       await axios.post("/api/db/checkCrosswalk", {
         userId, markerId
       }).then(response => {
-        // console.log(response.data)
         setPopupInfo({marker: response.data.marker, upvoted: response.data.upvoted})
       }).catch(error => {
         console.log(error.response.data)
@@ -113,7 +106,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
     const markerId = popupInfo.marker.id;
     const userId = session.user.email;
 
-    // if not voted yet, add a vote
+    // If not voted yet, add a vote
     if (!popupInfo.upvoted) {
       await axios.post("/api/db/upvoteCrosswalk", {
         userId, markerId
@@ -121,7 +114,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
         console.log(error.response.data)
       })
     } else {
-      // if already voted, remove a vote
+      // If already voted, remove a vote
       await axios.post("/api/db/downvoteCrosswalk", {
         userId, markerId
       }).catch(error => {
@@ -147,10 +140,8 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
   }
 
   useEffect(() => {
-    // for checking purposes
-    console.log(selected)
+
     if (selected !== null) {
-        // setViewState({longitude: selected.lng, latitude: selected.lat, zoom: 18})
         setPopupInfo(null)
         mapRef.current?.flyTo({
           center: [selected.lng, selected.lat],
@@ -183,11 +174,10 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
           latitude={marker.latitude}
           anchor="center"
           onClick={e => {
-            // prevent autoclose
+            // Prevent autoclose
             e.originalEvent.stopPropagation();
             
             checkCrosswalk(marker);
-            // setViewState({longitude: marker.longitude, latitude: marker.latitude, zoom: 19})
             mapRef.current?.flyTo({
               center: [marker.longitude, marker.latitude],
               zoom: 19,
@@ -252,7 +242,7 @@ export default function MapComponent({ markers, session, locArray, setLoaded }) 
           </div>
         </div>
 
-        {/* jump buttons in large view */}
+        {/* Jump buttons in large view */}
         <div className="absolute z-10 lg:ml-auto flex lg:flex-col gap-3 justify-between lg:w-30 lg:top-6 lg:right-6 lg:mb-0">
             {locations.map((location) => (
               <button

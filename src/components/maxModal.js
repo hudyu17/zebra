@@ -4,7 +4,6 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { signIn } from 'next-auth/react'
 
 export default function MaxModal({ open, setOpen }) {
-//   const [open, setOpen] = useState(initialOpen)
 
   return (
     <Transition.Root show={open} as={Fragment}>

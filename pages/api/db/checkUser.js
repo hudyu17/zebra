@@ -12,7 +12,7 @@ export default async function checkUser(req, res) {
     const { userId } = req.body;
     
     try {
-        // update uservote; user must exist if they've already upvoted
+        // Update uservote; user must exist if they've already upvoted
         const count = await prisma.crosswalk.aggregate({
           _count: {
             id: true

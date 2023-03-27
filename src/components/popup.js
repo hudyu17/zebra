@@ -17,10 +17,7 @@ export default function mapPopup({ lng, lat, setPopupInfo, address, description,
             :
             <HandThumbUpIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpvote(marker)}/>
         }
-            
-            {/* <HandThumbDownIcon className="h-6 w-6 cursor-pointer" onClick={handleDownvote}/> */}
         </div>
-        {/* <img width="100%" src={popupInfo.image} /> */}
     </Popup>
   )
 }

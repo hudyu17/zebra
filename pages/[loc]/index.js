@@ -9,14 +9,13 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline"
 import Layout from "../../src/components/layout"
 import Places from "../../src/components/crosswalkForm"
 import { authOptions } from "../api/auth/[...nextauth]"
-import { useRouter } from 'next/router'
 
 export default function Home({ markers, locArray }) {
     const { data: session, status } = useSession()
     
     const [loaded, setLoaded] = useState(false);
     
-    // offline dev
+    // // OFFLINE DEV
     // const session = {
     //   expires: "1",
     //   user: { email: "a", name: "Delta", image: "c" },
@@ -54,14 +53,14 @@ export default function Home({ markers, locArray }) {
 export async function getServerSideProps(context) {
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
   
-  // checking valid location in query
+  // Quick check that query contains valid location
   const loc = context.query.loc;
   const locArray = loc.split(",")
   if (locArray.length !== 3 || isNaN(locArray[0]) || isNaN(locArray[1]) || isNaN(locArray[2])) {
     return { notFound: true }
   }
 
-  // for offline dev
+  // // OFFLINE DEV
   // const markers = []
 
   const markers = await prisma.crosswalk.findMany();
