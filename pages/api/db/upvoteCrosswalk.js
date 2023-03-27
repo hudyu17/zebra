@@ -23,7 +23,7 @@ export default async function upvoteCrosswalk(req, res) {
             },
           })
         
-        // update uservote
+        // Update uservote
         const user = await prisma.userVote.findUnique({
           where: {
             userId: userId

@@ -12,7 +12,7 @@ export default async function downvoteCrosswalk(req, res) {
     const { userId, markerId } = req.body;
     
     try {
-        // update uservote; user must exist if they've already upvoted
+        // Update uservote; user must exist if they've already upvoted
         const upvoted = await prisma.userVote.findUnique({
           where: {
             userId: userId
@@ -21,12 +21,11 @@ export default async function downvoteCrosswalk(req, res) {
             upvoted: true
           }
         })
-        // console.log(upvoted)
         const index = upvoted.upvoted.indexOf(markerId);
         if (index > -1) { // only splice array when item is found
           upvoted.upvoted.splice(index, 1); // 2nd parameter means remove one item only
         } else {
-          // crosswalk wasn't upvoted previously (maybe error)
+          // Crosswalk wasn't upvoted previously (maybe error)
           res.status(400).send('Already downvoted')
           return
         }
@@ -42,7 +41,7 @@ export default async function downvoteCrosswalk(req, res) {
             }
           })
 
-        // actually decrement
+        // Decrement votes
         const updateVotes = await prisma.crosswalk.update({
           where: {
             id: markerId,

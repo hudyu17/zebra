@@ -12,7 +12,7 @@ export default function Layout({ main }) {
     const {data: session} = useSession()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-    // offline dev
+    // // OFFLINE DEV
     // const session = {
     //     expires: "1",
     //     user: { email: "a", name: "Delta", image: "c" },
@@ -35,7 +35,7 @@ export default function Layout({ main }) {
                     <nav className="lg:mt-5 flex-1 space-y-1 px-2 lg:ml-0 " aria-label="Sidebar">
                         {authenticated ?
                         <div className='h-full flex flex-col'>
-                        {/* mobile view small */}
+                        {/* Mobile view small */}
                         <div className='md:hidden flex my-auto self-end pr-2'>
                             
                             <Menu as="div" className="relative inline-block text-left">
@@ -140,11 +140,9 @@ export default function Layout({ main }) {
                                 className="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center mr-2 px-2 py-2 text-sm font-medium rounded-md"
                                 onClick={() => signIn("google", {callbackUrl: '/'})}
                             >
-                                {/* <div className='flex'> */}
                                 <ArrowRightOnRectangleIcon className='hidden lg:block h-6 w-6 mr-2'/>
                                 <p className=''>Login</p>
                                 <ArrowRightOnRectangleIcon className='lg:hidden h-6 w-6 ml-2 -mr-2'/>
-                                {/* </div> */}
                                 
                             </button>
                         </div>

@@ -27,7 +27,6 @@ export default async function checkCrosswalk(req, res) {
             }
         }
 
-        // res.json({upvoted: voted.upvoted, downvoted: voted.downvoted})
     } catch (error) {
         res.status(400).send(error.message);
     }

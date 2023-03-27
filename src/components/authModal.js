@@ -4,7 +4,6 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { signIn } from 'next-auth/react'
 
 export default function AuthModal({ open, setOpen, viewState }) {
-//   const [open, setOpen] = useState(initialOpen)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -52,7 +51,6 @@ export default function AuthModal({ open, setOpen, viewState }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                    // onClick={() => setOpen(false)}
                     onClick={() => signIn("google", {callbackUrl: `/${viewState.longitude},${viewState.latitude},${viewState.zoom}`})}
                   >
                     Login / Signup

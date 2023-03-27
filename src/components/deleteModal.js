@@ -11,7 +11,7 @@ export default function DeleteModal({ open, setOpen, marker }) {
     setOpen(false)
     const markerId = marker.id
 
-    // call api route to delete
+    // Call api route to delete
     await axios.delete(`/api/db/delete/${markerId}`)
     .then(res => {
       window.location.replace('/myCrosswalks')
