@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import { prisma } from "../../src/prisma"
 import { useState } from "react"
@@ -51,7 +51,7 @@ export default function Home({ markers, locArray }) {
 }
 
 export async function getServerSideProps(context) {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
   
   // Quick check that query contains valid location
   const loc = context.query.loc;

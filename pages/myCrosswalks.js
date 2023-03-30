@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from "next-auth"
+import { getServerSession } from "next-auth"
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { authOptions } from "./api/auth/[...nextauth]"
@@ -141,7 +141,7 @@ export default function MyCrosswalks({ crosswalkData }) {
 
 
 export async function getServerSideProps(context) {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions)
+    const session = await getServerSession(context.req, context.res, authOptions)
     
     if (!session) {
       return {

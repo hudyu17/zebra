@@ -12,7 +12,7 @@ export default function DeleteModal({ open, setOpen, marker }) {
     const markerId = marker.id
 
     // Call api route to delete
-    await axios.delete(`/api/db/delete/${markerId}`)
+    await axios.delete(`/api/db/delete/${markerId}`) // Should include authorisation headers
     .then(res => {
       window.location.replace('/myCrosswalks')
     })
